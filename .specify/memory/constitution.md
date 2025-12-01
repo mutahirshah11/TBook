@@ -1,55 +1,65 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Version change: 1.1.0 -> 1.1.1
+Modified principles:
+- Rigor: "Prefer" changed to "MUST prioritize"
+- Governance: Content revised for process-orientation
+Added sections: None
+Removed sections: None
+Templates requiring updates:
+- .specify/templates/plan-template.md: ✅ updated (Constitution Check section should align with new principles, including Test-Driven Development)
+- .specify/templates/spec-template.md: ✅ updated (no specific changes required based on this constitution)
+- .specify/templates/tasks-template.md: ✅ updated (no specific changes required based on this constitution)
+Follow-up TODOs: None
+-->
+# Digital Textbook on Physical AI & Humanoid Robotics (Docusaurus) Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Accuracy
+All claims must be verified against primary sources whenever possible.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Clarity
+Writing must target Flesch-Kincaid grade 10-12, clear for readers with a computer science or AI background.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Reproducibility
+All references, examples, and diagrams must be traceable.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Rigor
+MUST prioritize peer-reviewed or authoritative sources; ensure technical and scientific correctness.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Integrity
+Zero tolerance for plagiarism or fabricated content.
 
-### [PRINCIPLE_6_NAME]
+### Test-Driven Development
+Test-Driven Development (TDD) is a mandatory practice. Tests MUST be written before implementation, user-approved, and initially fail. A strict Red-Green-Refactor cycle MUST be enforced.
 
+### Key Standards
+- All factual claims must be traceable to sources.
+- Citation format: APA style.
+- Minimum 50% of sources must be peer-reviewed or authoritative.
+- Writing clarity: Flesch-Kincaid grade 10-12; active voice ≥ 75%.
+- Academic integrity: 0% plagiarism tolerance.
+- Figures, tables, diagrams, and code snippets must be accurate, labeled, and verified.
+- Digital formatting: Markdown compatible with Docusaurus; all hyperlinks, images, and embeds must function correctly.
 
-[PRINCIPLE__DESCRIPTION]
+## Constraints
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+- Word count: flexible per chapter but must meet book standards.
+- Format: Markdown for Docusaurus deployment.
+- All work must comply with the Constitution; no deviation allowed.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Testing & Verification
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- Verify all claims against authoritative sources.
+- Run plagiarism check on all content before publication.
+- Check readability scores and active voice percentage.
+- Review diagrams, tables, figures, and code snippets for accuracy and proper labeling.
+- Validate all Markdown links, images, and embeds in Docusaurus preview.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- **Amendment Process**: Amendments to this constitution MUST follow a formal review and approval process, documented with rationale.
+- **Compliance Review**: Adherence to these constitutional principles MUST be reviewed regularly (e.g., quarterly) to ensure ongoing alignment and effectiveness.
+- **Enforcement**: All contributors are responsible for upholding these principles. Violations will be addressed through established project governance procedures.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.1.1 | **Ratified**: 2025-12-01 | **Last Amended**: 2025-12-01
