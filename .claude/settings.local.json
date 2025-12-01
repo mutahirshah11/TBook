@@ -1,4 +1,20 @@
 {
+  "permissions": {
+    "allow": [
+      "SlashCommand(/sp.phr \"Documentation Environment Specification\" --stage spec)",
+      "Bash(.specify/scripts/bash/create-phr.sh:*)",
+      "Bash(git fetch:*)",
+      "Bash(.specify/scripts/powershell/create-new-feature.ps1:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(.specify/scripts/powershell/setup-plan.ps1:*)",
+      "WebSearch",
+      "Bash(bash.exe:*)",
+      "Bash(git mv:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(npx create-docusaurus@latest:*)",
+      "Bash(npm install:*)"
+    ]
+  },
   "enabledMcpjsonServers": [
     "context7",
     "github"
