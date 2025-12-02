@@ -1,18 +1,3 @@
 {
-  "mcpServers": {
-    "context7": {
-      "type": "http",
-      "url": "https://api.context7.com/mcp",
-      "headers": {
-        "Authorization": "ctx7sk-b3257932-a374-43f5-9ef2-aa5401a5a40f"
-      }
-    },
-    "github": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/",
-      "headers": {
-        "Authorization": "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"
-      }
-    }
-  }
+  "mcpServers": {}
 }
