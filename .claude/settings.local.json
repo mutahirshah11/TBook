@@ -12,7 +12,12 @@
       "Bash(git mv:*)",
       "Bash(git rev-parse:*)",
       "Bash(npx create-docusaurus@latest:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(git checkout:*)",
+      "Bash(mkdir:*)",
+      "SlashCommand(/sp.phr \"Create specification for Physical AI Foundations chapter\" --stage spec --feature physical-ai-foundations)",
+      "Bash(git config:*)",
+      "Bash(.specify/scripts/powershell/check-prerequisites.ps1:*)"
     ]
   },
   "enabledMcpjsonServers": [
