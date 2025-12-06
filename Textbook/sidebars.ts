@@ -40,6 +40,7 @@ const sidebars: SidebarsConfig = {
       label: 'Part 3: Robot Simulation with Gazebo',
       items: [
         'part3/chapter_9',
+        'part3/chapter_10',
       ],
     },
   ],
