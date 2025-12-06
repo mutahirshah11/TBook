@@ -1,0 +1,255 @@
+---
+title: ROS 2 Architecture and Core Concepts
+sidebar_label: Chapter 5 - ROS 2 Architecture
+description: Understanding nodes, topics, services, actions, and the underlying middleware.
+---
+
+# Chapter 5: ROS 2 Architecture and Core Concepts
+
+## Introduction
+
+Welcome to the world of ROS 2! In previous chapters, we've covered the theoretical foundations of physical AI and robotics. Now, we bridge the gap between theory and practice. This chapter is your "mental map" for the Robot Operating System 2 (ROS 2).
+
+Before writing complex robot behaviors, you need to understand how the pieces fit together. We will deconstruct the "ROS 2 Graph," explore the three primary communication patterns, and peek under the hood at the middleware that makes it all possible.
+
+### Goals
+By the end of this chapter, you will be able to:
+- Explain what a **Node** is and how it fits into the system.
+- Choose the right communication pattern (**Topic**, **Service**, or **Action**) for a given task.
+- Understand the role of **DDS** (Data Distribution Service) in discovery and data transport.
+- Configure nodes using **Parameters** and orchestrate them with **Launch files**.
+
+## The ROS 2 Graph
+
+Imagine a busy kitchen. You have a chef chopping vegetables, another cooking the sauce, a waiter taking orders, and a dishwasher cleaning plates. Each person is independent but communicates constantly to deliver a meal.
+
+In ROS 2, the "kitchen" is your robot application, and the individual workers are **Nodes**.
+
+### Nodes: The Functional Units
+A **Node** is the fundamental unit of computation in ROS 2. It is a process (or part of a process) that performs a specific task.
+- One node might read data from a laser scanner.
+- Another node might control the wheel motors.
+- A third node might calculate the path to a goal.
+
+Nodes are designed to be modular. Instead of writing one giant program that does everything (a "monolith"), you break your system into small, reusable nodes. This makes debugging easier: if the robot stops moving, you check the motor node. If the laser data is missing, you check the laser node.
+
+### Discovery
+How do these independent nodes find each other? If the *Motor Node* needs instructions, how does it know where the *Navigation Node* is?
+
+In ROS 1, there was a central server called the "Master" that everyone had to register with. If the Master crashed, the whole system went down.
+ROS 2 is **distributed**. There is no Master. Nodes automatically "discover" each other using the underlying network layer (DDS, which we'll cover later). When a node starts up, it announces its presence to the network. Any other node looking for it can now communicate directly.
+
+![Node Graph Diagram](/img/part2/chapter5/node-graph-diagram.png)
+*Figure 5.1: The ROS 2 Node Graph. Nodes (ellipses) communicate via Topics (rectangles), Services, and Actions.*
+
+## Under the Hood: DDS & Middleware
+
+ROS 2 is built on top of an industrial standard called **DDS** (Data Distribution Service). You don't usually write DDS code directly; ROS 2 provides a user-friendly interface, but it's important to know it's there.
+
+### The Abstraction Stack
+Your code doesn't talk directly to the network card. It goes through several layers:
+
+1.  **User Code**: Your Python or C++ program.
+2.  **rclpy / rclcpp**: The ROS Client Library (Python or C++). This gives you easy functions like `create_publisher`.
+3.  **rcl**: The foundational C library that both Python and C++ libraries use.
+4.  **RMW (Robot Middleware Interface)**: A translation layer. This allows ROS to support different DDS vendors without changing your code.
+5.  **DDS Implementation**: The actual software moving bits over the network (e.g., FastDDS, CycloneDDS).
+
+![System Architecture Diagram](/img/part2/chapter5/system-architecture-diagram.png)
+*Figure 5.2: The ROS 2 Abstraction Stack.*
+
+### Quality of Service (QoS)
+DDS allows for fine-grained control over how data is sent, known as **Quality of Service (QoS)**.
+- **Reliable**: Guarantees delivery. Like TCP in networking. Used for critical commands.
+- **Best Effort**: Tries to deliver, but may drop packets if the network is busy. Like UDP. Used for high-frequency sensor data (if you miss one camera frame, the next one is coming in 30ms anyway).
+
+## Communication Patterns
+
+ROS 2 provides three main ways for nodes to talk to each other. Choosing the right one is 80% of system design.
+
+### 1. Topics (Publish / Subscribe)
+**Topics** are for streaming data. This is the most common pattern in robotics.
+- **Publisher**: A node that generates data (e.g., "Here is the current laser scan").
+- **Subscriber**: A node that wants to use that data (e.g., "I need the laser scan to build a map").
+- **The Topic**: The named channel they communicate over (e.g., `/scan`).
+
+**Key Characteristics:**
+- **One-to-Many**: One publisher can send to ten subscribers.
+- **Many-to-Many**: Multiple nodes can publish to the same topic (though this can be messy).
+- **Asynchronous**: The publisher sends data and moves on. It doesn't wait to see if anyone received it.
+- **Continuous**: Designed for streams of data (sensor readings, robot velocity), not one-off commands.
+
+![Pub/Sub Flow Diagram](/img/part2/chapter5/pub-sub-flow-diagram.png)
+*Figure 5.3: The Publisher/Subscriber Pattern.*
+
+#### Python Example: Simple Publisher
+Here is a minimal node that publishes a "Hello World" string message every 0.5 seconds.
+
+```python
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+class MinimalPublisher(Node):
+    def __init__(self):
+        super().__init__('minimal_publisher')
+        # Create a publisher on the 'topic' topic, with a queue size of 10
+        self.publisher_ = self.create_publisher(String, 'topic', 10)
+        timer_period = 0.5  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.i = 0
+
+    def timer_callback(self):
+        msg = String()
+        msg.data = 'Hello World: %d' % self.i
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.data)
+        self.i += 1
+
+def main(args=None):
+    rclpy.init(args=args)
+    minimal_publisher = MinimalPublisher()
+    rclpy.spin(minimal_publisher)
+    minimal_publisher.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+#### Python Example: Simple Subscriber
+And here is the node that listens for it.
+
+```python
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+class MinimalSubscriber(Node):
+    def __init__(self):
+        super().__init__('minimal_subscriber')
+        # Create a subscription to the 'topic' topic
+        self.subscription = self.create_subscription(
+            String,
+            'topic',
+            self.listener_callback,
+            10)
+        self.subscription  # prevent unused variable warning
+
+    def listener_callback(self, msg):
+        self.get_logger().info('I heard: "%s"' % msg.data)
+
+def main(args=None):
+    rclpy.init(args=args)
+    minimal_subscriber = MinimalSubscriber()
+    rclpy.spin(minimal_subscriber)
+    minimal_subscriber.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+#### Performance & Scaling
+Topics are highly efficient. Because they sit on top of DDS, they can handle high-bandwidth data like HD video streams or LiDAR clouds.
+- **Zero Copy**: Within the same process, ROS 2 can pass pointers instead of serializing/deserializing data, making it incredibly fast for pipelines (e.g., Camera Driver -> Image Rectifier -> Object Detector all in one "Component Container").
+- **Multicast**: DDS can use UDP multicast, meaning a publisher sends a packet once, and the network switch delivers it to multiple subscribers, saving CPU on the sending robot.
+
+### 2. Services (Request / Response)
+**Services** are for synchronous transactions. You ask a question, and you wait for the answer.
+- **Client**: The node asking for something (e.g., "Please reset the odometer to zero").
+- **Server**: The node fulfilling the request.
+- **The Service**: The named channel (e.g., `/reset_odom`).
+
+**Key Characteristics:**
+- **One-to-One**: Typically one client talks to one server at a time.
+- **Synchronous**: The client usually "blocks" (waits) until the server replies.
+- **Quick**: Designed for fast operations (get state, set bool, calculate simple math). Do NOT use services for long tasks like "drive to the kitchen." If the robot takes 5 minutes to drive, your client is stuck waiting for 5 minutes, unable to do anything else.
+
+![Service Flow Diagram](/img/part2/chapter5/service-flow-diagram.png)
+*Figure 5.4: The Service Client/Server Pattern.*
+
+### 3. Actions (Goal / Feedback / Result)
+**Actions** are for long-running tasks. They combine the best of topics and services.
+- **Goal**: The client sends a goal (e.g., "Go to coordinates X, Y").
+- **Feedback**: While working, the server sends periodic updates (e.g., "I am 10% there... 20% there...").
+- **Result**: When finished, the server sends the final outcome (e.g., "Arrived successfully").
+- **Cancelable**: Crucially, the client can say "Stop!" mid-task.
+
+**Key Characteristics:**
+- **Asynchronous**: The client sends the goal and can go do other work while the robot drives.
+- **Complex**: The implementation is more involved than topics or services.
+- **Use Case**: Navigation, robotic arm manipulation, long calibration routines.
+
+![Action Flow Diagram](/img/part2/chapter5/action-flow-diagram.png)
+*Figure 5.5: The Action Pattern.*
+
+## Configuration & Orchestration
+
+### Parameters
+Hardcoding values (like "max_speed = 2.0") in your code is bad practice. If you move the code to a smaller robot, you have to recompile.
+**Parameters** allow you to configure nodes at runtime. A node can declare parameters (integer, string, double, list) and read their values. You can set these values from the command line or a configuration file (YAML).
+
+### Launch Files
+Starting nodes one by one in different terminals (`ros2 run pkg node`) is tedious.
+**Launch files** are Python scripts that describe the entire system configuration. They let you:
+- Start multiple nodes at once.
+- Set parameters for those nodes.
+- Remap topic names (e.g., connect `camera/image_raw` to `vision/input`).
+- Include other launch files.
+
+#### Python Example: Launch File
+Here is how you might launch the publisher and subscriber we wrote earlier.
+
+```python
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        # Start the publisher
+        Node(
+            package='my_package',
+            executable='minimal_publisher',
+            name='publisher_node',
+            parameters=[
+                {'publish_rate': 1.0}
+            ]
+        ),
+        # Start the subscriber
+        Node(
+            package='my_package',
+            executable='minimal_subscriber',
+            name='subscriber_node',
+            # Remap the topic name if needed
+            remappings=[
+                ('topic', 'my_custom_topic')
+            ]
+        ),
+    ])
+```
+
+## Advanced Concepts
+
+### SROS 2 (Security)
+By default, ROS 2 is unsecure. Any node on the network can listen to any topic.
+**SROS 2** (Secure ROS 2) adds authentication and encryption using standard X.509 certificates (similar to HTTPS). This ensures that only authorized nodes can join the graph and that data cannot be snooped or spoofed.
+
+### Rosbag
+**Rosbag** is a tool for recording data from topics and playing it back later. It is invaluable for debugging. You can record a sensor stream from the real robot, then replay it on your laptop to test your algorithms without needing the physical hardware.
+
+## Summary
+You have now mapped the ROS 2 landscape.
+- **Nodes** are the workers.
+- **Topics** stream data (Pub/Sub).
+- **Services** ask questions (Req/Resp).
+- **Actions** handle long jobs (Goal/Feedback/Result).
+- **Launch files** orchestrate the chaos.
+- **DDS** makes the connection.
+
+In the next chapter, we will put this into practice by building your first custom package and writing nodes from scratch.
+
+### Checklist
+- [ ] I can explain the difference between a Topic and a Service.
+- [ ] I understand why ROS 2 uses DDS.
+- [ ] I can read a basic Python publisher node and understand what it does.
