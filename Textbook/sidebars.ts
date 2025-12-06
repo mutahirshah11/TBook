@@ -32,6 +32,14 @@ const sidebars: SidebarsConfig = {
         'part2/chapter-5-ros2-architecture-and-core-concepts',
         'part2/chapter-6-nodes-topics-services-actions',
         'part2/chapter-7-building-packages',
+        'part2/chapter_8',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Part 3: Robot Simulation with Gazebo',
+      items: [
+        'part3/chapter_9',
       ],
     },
   ],
