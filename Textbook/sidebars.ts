@@ -41,6 +41,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'part3/chapter_9',
         'part3/chapter_10',
+        'part3/chapter_11',
       ],
     },
   ],
