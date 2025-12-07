@@ -17,7 +17,10 @@
       "Bash(mkdir:*)",
       "SlashCommand(/sp.phr \"Create specification for Physical AI Foundations chapter\" --stage spec --feature physical-ai-foundations)",
       "Bash(git config:*)",
-      "Bash(.specify/scripts/powershell/check-prerequisites.ps1:*)"
+      "Bash(.specify/scripts/powershell/check-prerequisites.ps1:*)",
+      "Bash(npm run build)",
+      "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\static\\img\" /s)",
+      "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\src\\theme\" /s)"
     ]
   },
   "enabledMcpjsonServers": [

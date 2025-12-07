@@ -3,8 +3,7 @@
 __pycache__/
 *.pyc
 .venv/
-venv/
-
+venv/ 
 # Production
 /build
 .claude 

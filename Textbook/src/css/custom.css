@@ -4,27 +4,60 @@
  * work well for content-centric websites.
  */
 
-/* You can override the default Infima variables here. */
+/* Override the default Infima variables with premium theme */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Primary colors - using our premium accent colors */
+  --ifm-color-primary: var(--accent-primary);
+  --ifm-color-primary-dark: #4f46e5;
+  --ifm-color-primary-darker: #4338ca;
+  --ifm-color-primary-darkest: #3730a3;
+  --ifm-color-primary-light: #818cf8;
+  --ifm-color-primary-lighter: #a5b4fc;
+  --ifm-color-primary-lightest: #c7d2fe;
+
+  /* Background colors */
+  --ifm-background-color: var(--bg-primary);
+  --ifm-background-surface-color: var(--bg-secondary);
+
+  /* Text colors */
+  --ifm-color-content: var(--text-primary);
+  --ifm-color-content-secondary: var(--text-secondary);
+
+  /* Border colors */
+  --ifm-toc-border-color: var(--border-primary);
+  --ifm-menu-color: var(--text-secondary);
+  --ifm-menu-color-active: var(--accent-primary);
+  --ifm-navbar-link-hover-color: var(--accent-primary);
+
+  /* Code block styling */
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-code-background: var(--bg-secondary);
+  --ifm-code-color: var(--text-primary);
+  --docusaurus-highlighted-code-line-bg: rgba(99, 102, 241, 0.15);
+
+  /* Font families */
+  --ifm-font-family-base: var(--font-primary);
+  --ifm-font-family-monospace: var(--font-mono);
+
+  /* Spacing */
+  --ifm-spacing-horizontal: var(--spacing-lg);
+  --ifm-spacing-vertical: var(--spacing-xl);
+
+  /* Border radius */
+  --ifm-global-radius: var(--radius-lg);
+
+  /* Shadow */
+  --ifm-global-shadow: var(--shadow-primary);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Dark mode specific overrides */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: var(--accent-primary);
+  --ifm-color-primary-dark: #4f46e5;
+  --ifm-color-primary-darker: #4338ca;
+  --ifm-color-primary-darkest: #3730a3;
+  --ifm-color-primary-light: #818cf8;
+  --ifm-color-primary-lighter: #a5b4fc;
+  --ifm-color-primary-lightest: #c7d2fe;
+  --docusaurus-highlighted-code-line-bg: rgba(99, 102, 241, 0.2);
 }

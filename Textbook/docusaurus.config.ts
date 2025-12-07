@@ -19,6 +19,18 @@ const config: Config = {
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
+    {
+      href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap',
+      type: 'text/css',
+    },
+    {
+      href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap',
+      type: 'text/css',
+    },
+    {
+      href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap',
+      type: 'text/css',
+    },
   ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -78,7 +90,11 @@ const config: Config = {
           onUntruncatedBlogPosts: 'warn',
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: [
+            './src/css/design-system.css',
+            './src/css/custom.css',
+            './src/css/futuristic-theme.css',
+          ],
         },
       } satisfies Preset.Options,
     ],
@@ -91,9 +107,9 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Robotics Book',
+      title: 'Physical AI & Humanoid Robotics',
       logo: {
-        alt: 'Robotics Book Logo',
+        alt: 'Physical AI & Humanoid Robotics Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -101,9 +117,8 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Textbook',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
