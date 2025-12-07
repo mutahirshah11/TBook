@@ -1,6 +1,6 @@
 ---
 title: "Building ROS 2 Packages with Python"
-sidebar_label: "7. Building ROS 2 Packages with Python"
+sidebar_label: "Chapter 7: Building ROS 2 Packages with Python"
 ---
 
 # Chapter 7: Building ROS 2 Packages with Python

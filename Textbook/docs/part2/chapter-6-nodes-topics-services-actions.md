@@ -1,6 +1,6 @@
 ---
 title: "Nodes, Topics, Services, and Actions"
-sidebar_label: "6. Nodes, Topics, Services, and Actions"
+sidebar_label: "Chapter 6: Nodes, Topics, Services, and Actions"
 ---
 
 # Chapter 6: Nodes, Topics, Services, and Actions

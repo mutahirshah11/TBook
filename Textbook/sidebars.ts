@@ -42,6 +42,7 @@ const sidebars: SidebarsConfig = {
         'part3/chapter_9',
         'part3/chapter_10',
         'part3/chapter_11',
+        'part3/chapter-12-unity-viz',
       ],
     },
   ],
