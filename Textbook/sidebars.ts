@@ -65,6 +65,15 @@ const sidebars: SidebarsConfig = {
         'part5/chapter-20-hri',
       ],
     },
+    {
+      type: 'category',
+      label: 'Part 6: Conversational Robotics',
+      items: [
+        'part6/chapter-21-llm-integration',
+        'part6/chapter-22-speech-nlu',
+        'part6/chapter-23-multimodal',
+      ],
+    },
   ],
 };
 
