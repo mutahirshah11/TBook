@@ -27,5 +27,3 @@ In this chapter, we established a high-speed TCP bridge between our ROS2 logic a
 
 In the next chapter, we will build a complete simulation scenario with sensors and a control loop.
 
-![Final Scene Screenshot](placeholder-final-scene.png)
-*(Placeholder: Screenshot of the robot in the URP scene with the connection HUD active)*
