@@ -55,6 +55,16 @@ const sidebars: SidebarsConfig = {
         'part4/chapter-16-sim-to-real',
       ],
     },
+    {
+      type: 'category',
+      label: 'Part 5: Humanoid Robot Development',
+      items: [
+        'part5/chapter-17-kinematics-dynamics',
+        'part5/chapter-18-locomotion',
+        'part5/chapter-19-manipulation',
+        'part5/chapter-20-hri',
+      ],
+    },
   ],
 };
 

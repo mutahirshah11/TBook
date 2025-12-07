@@ -1,5 +1,5 @@
 ---
-sidebar_label: 'Chapter 14: AI Perception'
+sidebar_label: 'Chapter 14: AI-powered perception and manipulation'
 sidebar_position: 14
 ---
 

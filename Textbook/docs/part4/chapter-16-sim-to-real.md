@@ -1,5 +1,5 @@
 ---
-sidebar_label: 'Chapter 16: Sim-to-Real'
+sidebar_label: 'Chapter 16: Sim-to-real transfer techniques'
 sidebar_position: 16
 ---
 

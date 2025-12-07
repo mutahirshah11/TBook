@@ -1,5 +1,5 @@
 ---
-sidebar_label: 'Chapter 15: RL Control'
+sidebar_label: 'Chapter 15: Reinforcement learning for robot control'
 sidebar_position: 15
 ---
 

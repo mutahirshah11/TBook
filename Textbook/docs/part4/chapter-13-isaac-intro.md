@@ -1,5 +1,5 @@
 ---
-sidebar_label: 'Chapter 13: NVIDIA Isaac Intro'
+sidebar_label: 'Chapter 13: NVIDIA Isaac SDK and Isaac Sim'
 sidebar_position: 13
 ---
 
