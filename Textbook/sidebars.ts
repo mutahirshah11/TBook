@@ -45,6 +45,16 @@ const sidebars: SidebarsConfig = {
         'part3/chapter-12-unity-viz',
       ],
     },
+    {
+      type: 'category',
+      label: 'Part 4: NVIDIA Isaac Platform',
+      items: [
+        'part4/chapter-13-isaac-intro',
+        'part4/chapter-14-perception',
+        'part4/chapter-15-rl-control',
+        'part4/chapter-16-sim-to-real',
+      ],
+    },
   ],
 };
 
