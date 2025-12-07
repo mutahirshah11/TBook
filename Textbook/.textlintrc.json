@@ -1,0 +1,13 @@
+{
+  "plugins": [],
+  "rules": {
+    "preset-ja-technical-writing": {
+      "no-doubled-conjunctive-particle-or-verb": true,
+      "max-ten": false,
+      "max-comma": false,
+      "max-number-of-lines": false,
+      "max-sentence-length": false
+    },
+    "preset-japanese": true
+  }
+}

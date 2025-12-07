@@ -1,6 +1,30 @@
 {
+  "permissions": {
+    "allow": [
+      "SlashCommand(/sp.phr \"Documentation Environment Specification\" --stage spec)",
+      "Bash(.specify/scripts/bash/create-phr.sh:*)",
+      "Bash(git fetch:*)",
+      "Bash(.specify/scripts/powershell/create-new-feature.ps1:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(.specify/scripts/powershell/setup-plan.ps1:*)",
+      "WebSearch",
+      "Bash(bash.exe:*)",
+      "Bash(git mv:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(npx create-docusaurus@latest:*)",
+      "Bash(npm install:*)",
+      "Bash(git checkout:*)",
+      "Bash(mkdir:*)",
+      "SlashCommand(/sp.phr \"Create specification for Physical AI Foundations chapter\" --stage spec --feature physical-ai-foundations)",
+      "Bash(git config:*)",
+      "Bash(.specify/scripts/powershell/check-prerequisites.ps1:*)",
+      "Bash(npm run build)",
+      "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\static\\img\" /s)",
+      "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\src\\theme\" /s)",
+      "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\build\" /s)"
+    ]
+  },
   "enabledMcpjsonServers": [
-    "context7",
     "github"
   ]
 }

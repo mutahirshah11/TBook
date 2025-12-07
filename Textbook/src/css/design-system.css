@@ -1,0 +1,126 @@
+/* Futuristic Design System for Physical AI & Humanoid Robotics Course */
+
+:root {
+  /* Background Colors - More Premium Tones */
+  --bg-primary: #0a0a0f; /* Deeper, more sophisticated black */
+  --bg-secondary: #14141a; /* Premium dark gray */
+  --bg-tertiary: #1e1e2a; /* Refined dark */
+  --bg-card: rgba(30, 30, 42, 0.85); /* More opaque for premium feel */
+  --bg-glass: rgba(30, 30, 42, 0.45);
+
+  /* Accent Colors - More Refined */
+  --accent-primary: #6366f1; /* Indigo - more premium than neon */
+  --accent-secondary: #8b5cf6; /* Violet - sophisticated accent */
+  --accent-tertiary: #ec4899; /* Rose - premium accent */
+  --accent-success: #10b981; /* Emerald - professional green */
+  --accent-warning: #f59e0b; /* Amber - refined warning */
+  --accent-danger: #ef4444; /* Red - standard danger */
+
+  /* Text Colors */
+  --text-primary: #f8fafc; /* Slightly warmer white */
+  --text-secondary: #cbd5e1; /* Soft blue-gray */
+  --text-tertiary: #94a3b8; /* Muted blue-gray */
+  --text-muted: #64748b; /* Subtle slate */
+
+  /* Border Colors */
+  --border-primary: rgba(99, 102, 241, 0.25); /* Subtle indigo */
+  --border-secondary: rgba(139, 92, 246, 0.2); /* Subtle violet */
+  --border-glow: rgba(99, 102, 241, 0.15);
+
+  /* Shadow Colors - More Subtle */
+  --shadow-primary: 0 8px 32px rgba(14, 16, 40, 0.3);
+  --shadow-secondary: 0 4px 16px rgba(14, 16, 40, 0.25);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+
+  /* Glassmorphism */
+  --glass-backdrop: backdrop-filter: blur(16px) saturate(150%);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Fira Code', Consolas, monospace;
+
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-full: 9999px;
+
+  /* Animation Durations */
+  --transition-fast: 200ms;
+  --transition-normal: 400ms;
+  --transition-slow: 600ms;
+
+  /* Z-index */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal: 1040;
+  --z-popover: 1050;
+  --z-tooltip: 1060;
+}
+
+/* Dark mode specific overrides */
+[data-theme='dark'] {
+  --ifm-background-color: var(--bg-primary);
+  --ifm-background-surface-color: var(--bg-secondary);
+  --ifm-color-content: var(--text-primary);
+  --ifm-color-content-secondary: var(--text-secondary);
+  --ifm-menu-color: var(--text-secondary);
+  --ifm-menu-color-active: var(--accent-primary);
+  --ifm-menu-link-hover-bg: rgba(0, 240, 255, 0.1);
+  --ifm-navbar-link-hover-color: var(--accent-primary);
+  --ifm-toc-border-color: var(--border-primary);
+  --ifm-global-shadow: var(--shadow-primary);
+}
+
+/* Light mode overrides if needed */
+[data-theme='light'] {
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #f8fafc;
+  --ifm-color-content: #1e293b;
+  --ifm-color-content-secondary: #64748b;
+  --ifm-menu-color: #64748b;
+  --ifm-menu-color-active: var(--accent-primary);
+  --ifm-menu-link-hover-bg: rgba(0, 240, 255, 0.1);
+  --ifm-navbar-link-hover-color: var(--accent-primary);
+  --ifm-toc-border-color: var(--border-primary);
+  --ifm-global-shadow: var(--shadow-primary);
+}
