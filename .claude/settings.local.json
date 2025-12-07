@@ -20,7 +20,8 @@
       "Bash(.specify/scripts/powershell/check-prerequisites.ps1:*)",
       "Bash(npm run build)",
       "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\static\\img\" /s)",
-      "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\src\\theme\" /s)"
+      "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\src\\theme\" /s)",
+      "Bash(dir \"C:\\Users\\DELL\\Desktop\\RoboticsBook\\book\\Textbook\\build\" /s)"
     ]
   },
   "enabledMcpjsonServers": [
