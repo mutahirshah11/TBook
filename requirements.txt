@@ -1,0 +1,5 @@
+qdrant-client
+cohere
+langchain-text-splitters
+python-dotenv
+tiktoken
