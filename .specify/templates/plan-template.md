@@ -40,7 +40,7 @@
 - **Data Privacy & Security**: Appropriate data handling and privacy protection measures must be in place.
 - **AI Ethics**: Bias detection and mitigation measures must be implemented; content filtering for safety required.
 - **Performance & Scalability**: Response time requirements (<3 seconds for 95% of queries) must be met.
-- **Test-Driven Development**: Tests are defined for AI functionality (hallucination checks, bias testing, safety validation).
+- **Strict Test-Driven Development**: **MANDATORY.** Plan MUST include explicit test creation tasks BEFORE implementation tasks. Verification strategy must rely on automated tests, not manual checks.
 
 ## Project Structure
 
