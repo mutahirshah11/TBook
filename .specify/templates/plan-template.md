@@ -31,7 +31,16 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Accuracy**: Content must correctly describe the integration of AI services with real-time systems.
+- **Clarity**: Flesch-Kincaid grade 10-12 for AI/ML documentation.
+- **Reproducibility**: `requirements.txt` and explicit model versions (e.g., `llama3`, specific model identifiers) required.
+- **Rigor**: Based on current state-of-the-art in AI/ML (Retrieval-Augmented Generation, VQA, etc.).
+- **Integrity**: Original tutorial content without plagiarism.
+- **AI Responsibility**: AI-generated content must be clearly identified; source attribution mechanisms must be implemented; hallucination detection required.
+- **Data Privacy & Security**: Appropriate data handling and privacy protection measures must be in place.
+- **AI Ethics**: Bias detection and mitigation measures must be implemented; content filtering for safety required.
+- **Performance & Scalability**: Response time requirements (<3 seconds for 95% of queries) must be met.
+- **Test-Driven Development**: Tests are defined for AI functionality (hallucination checks, bias testing, safety validation).
 
 ## Project Structure
 
