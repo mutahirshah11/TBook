@@ -9,16 +9,7 @@
         } , "timeout":5001 
       } , 
 
-      "context7": {
-			"command": "npx",
-			"args": [
-				"-y",
-				"@upstash/context7-mcp"
-			],
-			"env": {
-				"CONTEXT7_API_KEY": "ctx7sk-b3257932-a374-43f5-9ef2-aa5401a5a40f"
-			}
-		}
+      
 
       
     } 
