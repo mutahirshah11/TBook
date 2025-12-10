@@ -1,0 +1,27 @@
+[project]
+name = "book-rag-agent"
+version = "0.1.0"
+description = "RAG Agent for Robotics Book"
+requires-python = ">=3.10"
+dependencies = [
+    "openai-agents",
+    "qdrant-client",
+    "async_openai",
+    "pydantic",
+    "cohere",
+    "python-dotenv"
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest",
+    "ruff",
+    "black"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
