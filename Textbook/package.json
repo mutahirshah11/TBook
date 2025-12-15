@@ -24,7 +24,6 @@
     "react-dom": "^19.0.0",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "@openai/chat-components": "^0.1.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "ts-jest": "^29.0.0",

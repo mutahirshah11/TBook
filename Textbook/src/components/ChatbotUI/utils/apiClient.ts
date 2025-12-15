@@ -13,7 +13,7 @@ const DEFAULT_TIMEOUT = 30000; // 30 seconds
 const API_BASE_URL =
   (typeof process !== 'undefined' && process.env?.REACT_APP_API_BASE_URL) ||
   (typeof process !== 'undefined' && process.env?.API_BASE_URL) ||
-  'http://localhost:8000';
+  'http://127.0.0.1:8001';
 
 // API Client class for handling communication with the backend
 class ApiClient {
@@ -68,9 +68,19 @@ class ApiClient {
 
   // Send a message to the RAG system
   async sendMessage(data: SendMessageRequest): Promise<SendMessageResponse> {
-    return this.request<SendMessageResponse>('/api/chat/send', {
+    // Transform the frontend request format to match backend expectations
+    const backendPayload = {
+      query_text: data.message,
+      selected_text: data.selectedText || null,
+      context_mode: data.selectedText ? 'selected-text' : 'full-book', // Use selected-text mode if text is provided
+    };
+
+    return this.request<SendMessageResponse>('/api/v1/chat', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(backendPayload),
+      headers: {
+        'Authorization': 'Bearer dummy-token', // This will be ignored in dev mode
+      },
     });
   }
 
@@ -80,17 +90,22 @@ class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/chat/send`, {
+      // Transform the frontend request format to match backend expectations
+      const backendPayload = {
+        query_text: data.message,
+        selected_text: data.selectedText || null,
+        context_mode: data.selectedText ? 'selected-text' : 'full-book', // Use selected-text mode if text is provided
+      };
+
+      const response = await fetch(`${this.baseUrl}/api/v1/chat/stream`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'text/plain',
           'X-Stream': 'true', // Indicate that we want a streaming response
+          'Authorization': 'Bearer dummy-token', // Add dummy token for now
         },
-        body: JSON.stringify({
-          ...data,
-          stream: true, // Explicitly request streaming
-        }),
+        body: JSON.stringify(backendPayload),
         signal: controller.signal,
       });
 
@@ -176,19 +191,26 @@ class ApiClient {
   }
 
   // Create a new chat session
+  // Note: Session management is handled client-side in the browser
+  // This method is a placeholder to match the interface but doesn't make a server call
   async createSession(data?: CreateSessionRequest): Promise<CreateSessionResponse> {
-    return this.request<CreateSessionResponse>('/api/chat/session', {
-      method: 'POST',
-      body: JSON.stringify(data || {}),
-    });
+    // Client-side session management, no server call needed
+    return {
+      sessionId: `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    };
   }
 
   // Get session details
+  // Note: Session management is handled client-side in the browser
+  // This method is a placeholder to match the interface but doesn't make a server call
   async getSession(data: GetSessionRequest): Promise<GetSessionResponse> {
-    const params = new URLSearchParams({ sessionId: data.sessionId });
-    return this.request<GetSessionResponse>(`/api/chat/session?${params}`, {
-      method: 'GET',
-    });
+    // Client-side session management, no server call needed
+    return {
+      sessionId: data.sessionId,
+      isActive: true,
+      messageCount: 0, // This would need to be tracked client-side
+      lastActiveAt: new Date().toISOString(),
+    };
   }
 }
 
