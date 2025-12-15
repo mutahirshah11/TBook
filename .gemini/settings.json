@@ -1,25 +1,26 @@
 {
 
     "mcpServers": {
-    "github": {
-        "httpUrl": "https://api.githubcopilot.com/mcp/" , 
-        "headers":{
-            "Authorization" : "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"
+    // "github": {
+    //     "httpUrl": "https://api.githubcopilot.com/mcp/" , 
+    //     "headers":{
+    //         "Authorization" : "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"
 
-        } , "timeout":5001 
-      } , 
+    //     } , "timeout":5001 
+    //   } , 
 
       "context7": {
-			"command": "npx",
-			"args": [
-				"-y",
-				"@upstash/context7-mcp"
-			],
-			"env": {
-				"CONTEXT7_API_KEY": "ctx7sk-b3257932-a374-43f5-9ef2-aa5401a5a40f"
-			}
-		}
+      "httpUrl": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "ctx7sk-ffd42f7b-0ceb-475b-8aea-722d741cb3a4",
+        "Accept": "application/json, text/event-stream"
+      }
+    }
+      
 
       
     } 
   }
+
+
+  

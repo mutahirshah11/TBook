@@ -1,23 +1,15 @@
 <!--
-Version change: 1.1.1 -> 1.2.0
+Version change: 1.2.0 -> 1.3.0
 Modified principles:
-- Added AI Responsibility principle
-- Added Data Privacy & Security principle
-- Added AI Ethics principle
-- Added Performance & Scalability principle
-- Updated Key Standards to include AI-specific requirements
-- Updated Testing & Verification to include AI-specific tests
-- Updated Governance to include AI model governance
-Added sections: AI Responsibility, Data Privacy & Security, AI Ethics, Performance & Scalability
+- Test-Driven Development: Made strict TDD and verification mandatory for all features.
+Added sections: None
 Removed sections: None
 Templates requiring updates:
-- .specify/templates/plan-template.md: ⚠ pending (Constitution Check section needs to be updated to include AI-specific checks)
-- .specify/templates/spec-template.md: ⚠ pending (Requirements section needs to be updated to include AI-specific requirements)
-- .specify/templates/tasks-template.md: ⚠ pending (Task types need to be updated to include AI-specific tasks)
+- .specify/templates/plan-template.md: ⚠ pending (Constitution Check needs to enforce strict TDD)
+- .specify/templates/spec-template.md: ✅ updated
+- .specify/templates/tasks-template.md: ⚠ pending (Tasks must reflect mandatory tests)
 Follow-up TODOs:
-- Update all plan templates to include AI governance checks
-- Update spec templates to include AI-specific requirements
-- Update task templates to include AI-specific implementation tasks
+- Enforce strict TDD in all future plan and task generations.
 -->
 # Digital Textbook on Physical AI & Humanoid Robotics (Docusaurus) Constitution
 
@@ -50,8 +42,8 @@ Bias detection and mitigation measures must be implemented in retrieval and gene
 ### Performance & Scalability
 95% of queries must return results within 3 seconds; the system must handle expected concurrent users without degradation; memory usage and computational efficiency must be optimized; throughput requirements (queries per second) must be met under expected load.
 
-### Test-Driven Development
-Test-Driven Development (TDD) is a mandatory practice. Tests MUST be written before implementation, user-approved, and initially fail. A strict Red-Green-Refactor cycle MUST be enforced.
+### Strict Test-Driven Development & Verification
+**Test-Driven Development (TDD) is STRICTLY MANDATORY.** No feature implementation may begin until failing tests are written and approved. Verification is non-negotiable: every feature must include automated tests that prove correctness. Manual verification is insufficient. ALL pull requests and feature completions MUST be accompanied by passing test suites covering unit, integration, and edge cases.
 
 ### Key Standards
 - All factual claims must be traceable to sources.
@@ -94,4 +86,4 @@ Test-Driven Development (TDD) is a mandatory practice. Tests MUST be written bef
 - **Enforcement**: All contributors are responsible for upholding these principles. Violations will be addressed through established project governance procedures.
 - **AI Model Governance**: All AI models and their datasets must undergo approval before deployment, including bias testing, safety evaluation, and performance validation.
 
-**Version**: 1.2.0 | **Ratified**: 2025-12-01 | **Last Amended**: 2025-12-08
+**Version**: 1.3.0 | **Ratified**: 2025-12-01 | **Last Amended**: 2025-12-09

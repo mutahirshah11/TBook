@@ -1,0 +1,176 @@
+# OpenAPI Contract: Backend Agent Integration
+
+openapi: 3.0.3
+info:
+  title: Backend Agent Integration API
+  description: API for connecting the ChatKit UI to the existing RAG agent, with interaction logging to Neon database
+  version: 1.0.0
+  contact:
+    name: Development Team
+    email: dev@example.com
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://backend.example.com
+    description: Production server
+
+paths:
+  /chat:
+    post:
+      summary: Send a message to the RAG agent and get a response
+      description: Forwards the message to the existing RAG agent and returns the complete response. Interaction metadata is logged to Neon database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Successful response from the agent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Chat
+
+  /chat-stream:
+    post:
+      summary: Send a message to the RAG agent and get a streaming response
+      description: Forwards the message to the existing RAG agent and streams the response in real-time. Interaction metadata is logged to Neon database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Streaming response from the agent
+          content:
+            text/event-stream:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: The response content chunk
+                  status:
+                    type: string
+                    enum: [partial, complete]
+                    description: The status of this response chunk
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Chat
+        - Streaming
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          $ref: '#/components/schemas/Message'
+
+    Message:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          description: The message content
+          minLength: 1
+          maxLength: 4000
+        user_id:
+          type: string
+          description: Optional user identifier
+          pattern: "^[a-zA-Z0-9-_]+$"
+        timestamp:
+          type: string
+          format: date-time
+          description: When the message was created
+        metadata:
+          type: object
+          description: Additional context for the agent (e.g., full-book or selected-text queries)
+          additionalProperties: true
+
+    ChatResponse:
+      type: object
+      required:
+        - response
+      properties:
+        response:
+          $ref: '#/components/schemas/Response'
+
+    Response:
+      type: object
+      required:
+        - content
+        - message_id
+        - timestamp
+        - status
+      properties:
+        content:
+          type: string
+          description: The agent's response content
+        message_id:
+          type: string
+          description: Reference to the original message
+        timestamp:
+          type: string
+          format: date-time
+          description: When the response was generated
+        status:
+          type: string
+          enum: [success, error, partial]
+          description: The status of the response
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true
+
+tags:
+  - name: Chat
+    description: Synchronous chat operations
+  - name: Streaming
+    description: Streaming chat operations

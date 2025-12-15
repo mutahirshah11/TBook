@@ -1,0 +1,45 @@
+{
+  "name": "@robotics-book/chatbot-ui",
+  "version": "1.0.0",
+  "description": "Chatbot UI component for the Robotics Book Docusaurus site",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "dev": "webpack serve --mode development",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@openai/chat-components": "^0.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "typescript": "^5.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "keywords": [
+    "docusaurus",
+    "chatbot",
+    "rag",
+    "ai",
+    "robotics",
+    "education"
+  ],
+  "author": "Robotics Book Team",
+  "license": "MIT"
+}
