@@ -1,20 +1,20 @@
 import pytest
 from unittest.mock import MagicMock, patch
 
-from src.agents.book_rag_agent.tools import retrieve_book_context_logic
-from src.agents.book_rag_agent.settings import settings
+from backend.agents.book_rag_agent.tools import retrieve_book_context_logic
+from backend.agents.book_rag_agent.settings import settings
 
 # Placeholder tests for Phase 2
 def test_imports():
-    from src.agents.book_rag_agent import agent
-    from src.agents.book_rag_agent import models
-    from src.agents.book_rag_agent import settings
+    from backend.agents.book_rag_agent import agent
+    from backend.agents.book_rag_agent import models
+    from backend.agents.book_rag_agent import settings
     assert True
 
 def test_retrieve_logic_mocked():
     """Test retrieval logic with mocked clients."""
-    with patch("src.agents.book_rag_agent.settings.Settings.get_qdrant_client") as mock_qdrant_get, \
-         patch("src.agents.book_rag_agent.settings.Settings.get_cohere_client") as mock_cohere_get:
+    with patch("backend.agents.book_rag_agent.settings.Settings.get_qdrant_client") as mock_qdrant_get, \
+         patch("backend.agents.book_rag_agent.settings.Settings.get_cohere_client") as mock_cohere_get:
          
         mock_qdrant = MagicMock()
         mock_cohere = MagicMock()

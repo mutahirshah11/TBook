@@ -19,8 +19,8 @@ import logging
 
 # Import the agent interface at module level to avoid function-level imports
 try:
-    from src.agents.book_rag_agent.interface import ask_agent
-    from src.agents.book_rag_agent.settings import settings
+    from backend.agents.book_rag_agent.interface import ask_agent
+    from backend.agents.book_rag_agent.settings import settings
     AGENT_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: Could not import agent: {e}")
@@ -92,7 +92,7 @@ class AgentClient:
             # Set up the OpenAI client with Gemini for compatibility
             # This configures the global OpenAI client to work with Gemini
             import openai
-            openai.api_key = os.getenv("GEMINI_API_KEY", "")
+            openai.api_key = os.getenv("GEMINI_API_KEY")
             openai.base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"  # Gemini-compatible endpoint
 
             # Agent interface already imported at module level

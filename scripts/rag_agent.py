@@ -3,8 +3,8 @@ import argparse
 import sys
 import logging
 
-from src.agents.book_rag_agent.interface import ask_agent
-from src.agents.book_rag_agent.utils import setup_logging
+from backend.agents.book_rag_agent.interface import ask_agent
+from backend.agents.book_rag_agent.utils import setup_logging
 
 logger = setup_logging()
 
