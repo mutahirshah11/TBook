@@ -134,16 +134,34 @@ class ApiClient {
 
           buffer += decoder.decode(value, { stream: true });
 
-          // Process the buffer looking for complete chunks
+          // Process the buffer looking for complete lines (Server-Sent Events format)
           let boundary = buffer.indexOf('\n');
           while (boundary !== -1) {
-            const chunk = buffer.substring(0, boundary);
+            const line = buffer.substring(0, boundary).trim();
             buffer = buffer.substring(boundary + 1);
 
-            if (chunk.trim()) {
+            if (line.startsWith('data: ')) {
+              // This is a Server-Sent Event data line
+              const dataContent = line.substring(6); // Remove "data: " prefix
               try {
-                // Try to parse as JSON (Server-Sent Events format or JSON lines)
-                const parsed = JSON.parse(chunk);
+                const parsed = JSON.parse(dataContent);
+                if (typeof parsed === 'object' && parsed.content !== undefined) {
+                  if (parsed.status === 'error') {
+                    onChunk(`Error: ${parsed.content}`, true);
+                  } else {
+                    onChunk(parsed.content, parsed.status === 'complete');
+                  }
+                } else {
+                  onChunk(dataContent, false);
+                }
+              } catch (e) {
+                // If it's not JSON, treat as plain text
+                onChunk(dataContent, false);
+              }
+            } else if (line) {
+              // Handle non-SSE format for compatibility
+              try {
+                const parsed = JSON.parse(line);
                 if (typeof parsed === 'object' && parsed.content !== undefined) {
                   onChunk(parsed.content, parsed.isFinal || false);
                 } else if (typeof parsed === 'string') {
@@ -151,7 +169,7 @@ class ApiClient {
                 }
               } catch (e) {
                 // If it's not JSON, treat as plain text
-                onChunk(chunk, false);
+                onChunk(line, false);
               }
             }
 
@@ -161,15 +179,31 @@ class ApiClient {
 
         // Process any remaining data in buffer
         if (buffer.trim()) {
-          try {
-            const parsed = JSON.parse(buffer);
-            if (typeof parsed === 'object' && parsed.content !== undefined) {
-              onChunk(parsed.content, parsed.isFinal || true);
-            } else if (typeof parsed === 'string') {
-              onChunk(buffer, true);
+          // Handle remaining data - could be partial SSE line or JSON
+          const trimmedBuffer = buffer.trim();
+          if (trimmedBuffer.startsWith('data: ')) {
+            const dataContent = trimmedBuffer.substring(6);
+            try {
+              const parsed = JSON.parse(dataContent);
+              if (typeof parsed === 'object' && parsed.content !== undefined) {
+                onChunk(parsed.content, true);
+              } else {
+                onChunk(dataContent, true);
+              }
+            } catch (e) {
+              onChunk(dataContent, true);
             }
-          } catch (e) {
-            onChunk(buffer, true);
+          } else {
+            try {
+              const parsed = JSON.parse(trimmedBuffer);
+              if (typeof parsed === 'object' && parsed.content !== undefined) {
+                onChunk(parsed.content, true);
+              } else if (typeof parsed === 'string') {
+                onChunk(trimmedBuffer, true);
+              }
+            } catch (e) {
+              onChunk(trimmedBuffer, true);
+            }
           }
         }
       } finally {
