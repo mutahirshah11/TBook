@@ -202,7 +202,16 @@
       "Bash(python -c \"\nfrom main import app\nfrom fastapi.testclient import TestClient\nimport json\n\nclient = TestClient(app)\n\n# Test the health endpoint\nresponse = client.get(''/health'')\nprint(f''Health check status: {response.status_code}'')\nprint(f''Health check response: {response.json()}'')\n\n# Test the root endpoint\nresponse = client.get(''/'')\nprint(f''Root endpoint status: {response.status_code}'')\nprint(f''Root endpoint response: {response.json()}'')\n\nprint(''Basic functionality test completed successfully'')\n\")",
       "Bash(python -c \"\nfrom main import app\nfrom fastapi.testclient import TestClient\nimport json\n\nclient = TestClient(app)\n\n# Test the chat endpoint with a simple request\ntest_request = {\n    ''message'': {\n        ''content'': ''Hello, test message'',\n        ''user_id'': ''test-user''\n    }\n}\n\n# This should work with the implemented endpoint\nresponse = client.post(''/api/v1/chat'', json=test_request)\nprint(f''Chat endpoint status: {response.status_code}'')\nif response.status_code == 200:\n    print(f''Chat endpoint response: {response.json()}'')\nelse:\n    print(f''Chat endpoint error: {response.text}'')\n\nprint(''API functionality test completed'')\n\")",
       "Bash(find . -name \"*.py\" -type f -exec grep -l \"run_agent\\|AsyncOpenAI\\|OpenAI\\|Gemini\\|Qdrant\" {} ;)",
-      "Bash(find . -name \"*.py\" -not -path \"./backend/*\" -not -path \"./.venv/*\" -exec grep -l \"run_agent\\|OpenAI\\|AsyncOpenAI\\|agents\\|gemini\\|qdrant\" {} ;)"
+      "Bash(find . -name \"*.py\" -not -path \"./backend/*\" -not -path \"./.venv/*\" -exec grep -l \"run_agent\\|OpenAI\\|AsyncOpenAI\\|agents\\|gemini\\|qdrant\" {} ;)",
+      "Bash(dir \"C:\\\\Users\\\\DELL\\\\Desktop\\\\RoboticsBook\\\\book\" /s)",
+      "Bash(findstr /i \"server\")",
+      "Bash(dir \"C:\\\\Users\\\\DELL\\\\Desktop\\\\RoboticsBook\\\\book\\\\Textbook\")",
+      "Bash(findstr -i env)",
+      "Bash(python -c \"import sys; sys.path.insert\\(0, ''C:/Users/DELL/Desktop/RoboticsBook/book/backend''\\); from backend.start_server import *; print\\(''Backend server configuration checked''\\)\")",
+      "Bash(curl -X GET http://127.0.0.1:8001/health)",
+      "Bash(python -m backend.start_server)",
+      "Bash(del \"C:\\\\Users\\\\DELL\\\\Desktop\\\\RoboticsBook\\\\book\\\\Textbook\\\\src\\\\constants\\\\api.ts\")",
+      "Bash(del \"C:\\\\Users\\\\DELL\\\\Desktop\\\\RoboticsBook\\\\book\\\\Textbook\\\\.env\")"
     ]
   },
   "enabledMcpjsonServers": [
