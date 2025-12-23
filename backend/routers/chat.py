@@ -17,7 +17,9 @@ sys.path.insert(0, backend_dir)
 
 from schemas import ChatRequest, ChatResponse, ErrorResponse, ResponseStatus, Message, InteractionLog
 from agent_client import agent_client
-from backend.utils.database import neon_db
+from utils.database import neon_db
+from src.models.conversation import ConversationCreate
+from src.services.conversation_service import ConversationService
 
 # Security functions for input sanitization
 def sanitize_input(text: str) -> str:
@@ -146,8 +148,43 @@ async def chat_endpoint(chat_request: dict):
             metadata=internal_message.metadata
         )
 
-        # Log to database asynchronously
-        await neon_db.log_interaction(interaction_log)
+        # Log to database asynchronously (with graceful error handling)
+        try:
+            await neon_db.log_interaction(interaction_log)
+        except Exception as e:
+            logging.error(f"Failed to log interaction to database: {str(e)}")
+            # Try to store in fallback if database is unavailable
+            from src.services.fallback_service import fallback_service
+            try:
+                await fallback_service.store_conversation_fallback(
+                    user_id, internal_message.content, agent_response.content
+                )
+                logging.info(f"Stored interaction in fallback for user {user_id}")
+            except Exception as fallback_error:
+                logging.error(f"Failed to store interaction in fallback: {str(fallback_error)}")
+
+        # Save conversation to conversation history (if user_id is available)
+        if user_id and user_id != 'unknown':
+            try:
+                conversation_data = ConversationCreate(
+                    user_id=user_id,
+                    query=internal_message.content,
+                    response=agent_response.content
+                )
+                conversation_service = ConversationService()
+                await conversation_service.save_conversation(conversation_data)
+                logging.info(f"Conversation saved to history for user {user_id}")
+            except Exception as e:
+                logging.error(f"Failed to save conversation to history: {str(e)}")
+                # Try to store in fallback if main database is unavailable
+                from src.services.fallback_service import fallback_service
+                try:
+                    await fallback_service.store_conversation_fallback(
+                        user_id, internal_message.content, agent_response.content
+                    )
+                    logging.info(f"Stored conversation in fallback for user {user_id}")
+                except Exception as fallback_error:
+                    logging.error(f"Failed to store conversation in fallback: {str(fallback_error)}")
 
         return response
 
@@ -254,7 +291,43 @@ async def chat_stream_endpoint(chat_request: dict):
             metadata=metadata
         )
 
-        await neon_db.log_interaction(completion_log)
+        # Log to database asynchronously (with graceful error handling)
+        try:
+            await neon_db.log_interaction(completion_log)
+        except Exception as e:
+            logging.error(f"Failed to log streaming interaction to database: {str(e)}")
+            # Try to store in fallback if database is unavailable
+            from src.services.fallback_service import fallback_service
+            try:
+                await fallback_service.store_conversation_fallback(
+                    user_id, request_content, "Streaming response completed"
+                )
+                logging.info(f"Stored streaming interaction in fallback for user {user_id}")
+            except Exception as fallback_error:
+                logging.error(f"Failed to store streaming interaction in fallback: {str(fallback_error)}")
+
+        # Save conversation to conversation history (if user_id is available)
+        if user_id and user_id != 'unknown':
+            try:
+                conversation_data = ConversationCreate(
+                    user_id=user_id,
+                    query=request_content,
+                    response="Streaming response completed"  # Placeholder for now
+                )
+                conversation_service = ConversationService()
+                await conversation_service.save_conversation(conversation_data)
+                logging.info(f"Streaming conversation saved to history for user {user_id}")
+            except Exception as e:
+                logging.error(f"Failed to save streaming conversation to history: {str(e)}")
+                # Try to store in fallback if main database is unavailable
+                from src.services.fallback_service import fallback_service
+                try:
+                    await fallback_service.store_conversation_fallback(
+                        user_id, request_content, "Streaming response completed"
+                    )
+                    logging.info(f"Stored streaming conversation in fallback for user {user_id}")
+                except Exception as fallback_error:
+                    logging.error(f"Failed to store streaming conversation in fallback: {str(fallback_error)}")
 
     async def event_generator():
         try:

@@ -49,8 +49,7 @@ package-lock.json
 yarn.lock
 .npm
 .npmrc
-/node_modules
-
+node_modules/
 # IDE
 .vscode/
 .idea/

@@ -1,18 +1,78 @@
 # Backend Agent Integration
 
-This backend service connects the ChatKit UI to the existing RAG agent, providing a bridge between the frontend interface and the AI agent functionality. The service is built with FastAPI and designed for deployment as Python serverless functions on Vercel.
+This backend service connects the ChatKit UI to the existing RAG agent, providing a bridge between the frontend interface and the AI agent functionality. The service is built with FastAPI and includes user authentication and conversation history storage with FastAPI lifespan management. The service is designed for deployment as Python serverless functions on Vercel.
 
 ## Features
 
 - **Synchronous Chat API**: Send messages to the agent and receive complete responses
 - **Streaming Chat API**: Real-time streaming of agent responses using Server-Sent Events
+- **User Authentication**: Foundation for user accounts with email and password storage (preparing for Better Auth integration)
+- **Conversation History**: User-specific conversation history with automatic retention of last 50 conversations
 - **Interaction Logging**: All interactions are logged to Neon Serverless Postgres for analytics
-- **Error Handling**: Comprehensive error handling and validation
+- **Database Connection Management**: Proper initialization and cleanup using FastAPI lifespan event handlers
+- **Error Handling**: Comprehensive error handling and validation with graceful degradation when database is unavailable
 - **Timeout Management**: Configurable request timeouts to prevent hanging requests
 
 ## API Endpoints
 
-### POST /api/v1/chat
+### Authentication Endpoints
+
+#### POST /api/v1/auth/register
+Register a new user account.
+
+**Request Body**:
+```json
+{
+  "email": "user@example.com",
+  "password": "securepassword123"
+}
+```
+
+**Response**:
+```json
+{
+  "id": "user-uuid",
+  "email": "user@example.com",
+  "created_at": "2023-12-21T10:00:00Z"
+}
+```
+
+#### POST /api/v1/auth/login
+Authenticate a user account.
+
+**Request Body**:
+```json
+{
+  "email": "user@example.com",
+  "password": "securepassword123"
+}
+```
+
+**Response**:
+```json
+{
+  "user_id": "user-uuid",
+  "email": "user@example.com"
+}
+```
+
+### Conversation Endpoints
+
+#### POST /api/v1/conversations/internal-save
+Internal endpoint to save a conversation (used by chat functionality).
+
+**Request Body**:
+```json
+{
+  "user_id": "user-uuid",
+  "query": "User's query",
+  "response": "AI's response"
+}
+```
+
+### Chat Endpoints
+
+#### POST /api/v1/chat
 Send a message to the agent and receive a complete response.
 
 **Request Body**:
@@ -73,8 +133,39 @@ GEMINI_API_KEY=your_gemini_key_here
 QDRANT_URL=your_qdrant_url
 QDRANT_API_KEY=your_qdrant_api_key
 NEON_DATABASE_URL=your_neon_db_url
+DATABASE_URL=postgresql://username:password@host:port/database
 AGENT_TIMEOUT=30
 LOG_LEVEL=INFO
+```
+
+## Database Setup
+
+The system uses Neon PostgreSQL for user authentication and conversation history storage.
+
+### Initialization
+
+Run the database initialization script to create required tables:
+
+```bash
+cd backend
+python scripts/init_db.py
+```
+
+This creates:
+- `users` table for user authentication data
+- `conversations` table for conversation history (max 50 per user)
+- `interaction_logs` table for existing interaction logging
+
+### Migration Scripts
+
+Alternatively, run the migration scripts directly:
+
+```bash
+# Create users table
+psql -d your_database -f backend/scripts/migrations/001_create_users_table.sql
+
+# Create conversations table
+psql -d your_database -f backend/scripts/migrations/002_create_conversations_table.sql
 ```
 
 ## Setup and Installation
@@ -111,15 +202,22 @@ pytest tests/
 
 ## Architecture
 
-- **Framework**: FastAPI for async operations and streaming support
+- **Framework**: FastAPI for async operations, streaming support, and lifespan management
 - **Validation**: Pydantic for request/response validation
-- **Database**: Neon Serverless Postgres for interaction logging
+- **User Authentication**: Foundation for user accounts with email/password storage (preparing for Better Auth integration)
+- **Conversation Storage**: User-specific conversation history with automatic retention of last 50 conversations
+- **Database**: Neon Serverless Postgres for user data, conversation history, and interaction logging
+- **Connection Management**: Proper initialization and cleanup using FastAPI lifespan event handlers
+- **Error Handling**: Graceful degradation when database is unavailable with fallback storage
 - **Vector Store**: Qdrant Cloud (read-only access)
-- **Deployment**: Vercil Python Serverless Functions
+- **Deployment**: Vercel Python Serverless Functions
 
 ## Security
 
 - Input validation using Pydantic schemas
+- Passwords securely hashed using bcrypt
 - CORS configured for secure cross-origin requests
 - Environment variables for sensitive configuration
 - Error messages sanitized to prevent information disclosure
+- SQL injection prevention through parameterized queries
+- User input sanitization to prevent XSS and other injection attacks
