@@ -4,7 +4,7 @@ from backend.agents.book_rag_agent.settings import settings
 
 # Configure Model with Gemini Client
 gemini_model = OpenAIChatCompletionsModel(
-    model="gemini-2.5-flash-lite",
+    model="gemini-2.5-flash",
     openai_client=settings.get_openai_client()
 )
 

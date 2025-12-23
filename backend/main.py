@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -33,11 +34,26 @@ class Settings(BaseSettings):
 # Initialize settings
 settings = Settings()
 
-# Initialize FastAPI app
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Initialize database connection
+    import logging
+    from utils.database import init_database, close_database
+    logging.info("Starting up application...")
+    await init_database()
+    logging.info("Application startup completed, database connection initialized")
+    yield
+    # Shutdown: Close database connection
+    logging.info("Shutting down application...")
+    await close_database()
+    logging.info("Application shutdown completed, database connection closed")
+
+# Initialize FastAPI app with lifespan
 app = FastAPI(
     title="Backend Agent Integration API",
     description="API for connecting the ChatKit UI to the existing RAG agent, with interaction logging to Neon database",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Configure CORS middleware for ChatKit UI
@@ -59,11 +75,19 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
 from routers import chat
+from src.api.auth import router as auth_router
+from src.api.conversations import router as conversations_router
 from utils.logging import setup_logging_middleware
 from utils.error_handlers import setup_error_handlers
 
 # Include the chat router with API versioning
 app.include_router(chat.router, prefix="/api/v1", tags=["chat"])
+
+# Include the auth router with API versioning
+app.include_router(auth_router, prefix="/api/v1", tags=["authentication"])
+
+# Include the conversations router with API versioning
+app.include_router(conversations_router, prefix="/api/v1", tags=["conversations"])
 
 # Setup logging and error handling
 app = setup_logging_middleware(app)

@@ -1,0 +1,131 @@
+openapi: 3.0.0
+info:
+  title: User Authentication Data Storage API
+  version: 1.0.0
+  description: API for foundational user authentication data storage in preparation for Better Auth integration and conversation history management
+
+paths:
+  /api/auth/register:
+    post:
+      summary: Register a new user (foundational implementation, preparing for Better Auth)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+              required:
+                - email
+                - password
+      responses:
+        '201':
+          description: User created successfully in database
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  email:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+        '400':
+          description: Invalid input or user already exists
+
+  /api/auth/login:
+    post:
+      summary: Verify user credentials (foundational implementation, preparing for Better Auth)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Credentials verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+        '401':
+          description: Invalid credentials
+
+  /api/conversations:
+    get:
+      summary: Get user's conversation history
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 50
+          description: Number of conversations to return (max 50)
+      responses:
+        '200':
+          description: List of user's conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        query:
+                          type: string
+                        response:
+                          type: string
+                        timestamp:
+                          type: string
+                          format: date-time
+        '401':
+          description: Unauthorized
+    post:
+      summary: Save a new conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                response:
+                  type: string
+              required:
+                - query
+                - response
+      responses:
+        '201':
+          description: Conversation saved successfully
+        '401':
+          description: Unauthorized

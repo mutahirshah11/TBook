@@ -16,7 +16,7 @@ You have access to a tool 'retrieve_book_context' that searches the book's conte
 
 # Configure Model with Gemini Client
 gemini_model = OpenAIChatCompletionsModel(
-    model="gemini-2.5-flash-lite",
+    model="gemini-2.5-flash",
     openai_client=settings.get_openai_client()
 )
 
