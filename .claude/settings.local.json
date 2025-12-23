@@ -237,7 +237,8 @@
       "Bash(python test_duplicate.py)",
       "Skill(sp.constitution)",
       "Bash(.specify/scripts/powershell/create-new-feature.ps1 -Json \" write specs for implementing Better-Auth–based authentication to the product as the system''s single source of truth for identity. The system must support Signup and Signin flows using Better-Auth, including session management and secure user identification.\n\nOn Signup only, extend the Better-Auth flow to collect additional user background data:\n\nPython proficiency \\(Beginner, Intermediate, Advanced\\)\n\nDeveloper role \\(Frontend Developer, Backend Developer, Full Stack Developer, None\\)\n\nPersist authentication data and extended user profile data in the existing Neon Serverless Postgres database, using a relational structure that links the Better-Auth user identifier to a user profile table. Create new tables or columns only if required.\n\nAuthentication must be optional for reading public book content but mandatory for personalization features. Collected user background data must be used exclusively for RAG chatbot personalization, influencing explanation depth, examples, and terminology, while leaving all Markdown book content static and unchanged.\n\nAll implementation must comply with the Constitution and enforce strict Test-Driven Development \\(TDD\\).\"\"\" --json --number 1 --short-name \"better-auth\" \"Better-Auth authentication implementation\")",
-      "Bash(git checkout -b 1-better-auth)"
+      "Bash(git checkout -b 1-better-auth)",
+      "Bash(.specify/scripts/powershell/update-agent-context.ps1 -AgentType claude)"
     ]
   },
   "enabledMcpjsonServers": [
