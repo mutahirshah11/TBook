@@ -4,11 +4,11 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import { Cpu, Zap, Activity, Globe, Layers, Eye, BookOpen, ArrowRight, Star } from 'lucide-react';
 
 import styles from './index.module.css';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {  
@@ -17,41 +17,38 @@ function HomepageHeader() {
 
   return (
     <header className={clsx('hero', styles.heroBanner)}>
+      <div className={styles.heroVisual}>
+        <div className={styles.heroOrb}></div>
+        <div className={styles.heroGrid}></div>
+        <div className={styles.heroFlow}></div>
+      </div>
+      
       <div className="container">
         <div className={clsx(styles.heroContent, isVisible && styles.visible)}>
-          <div className={styles.heroText}>
-            <div className={styles.heroBadge}>PREMIUM COURSE</div>
-            <Heading as="h1" className={clsx('hero__title', styles.mainTitle)}>
-              Physical AI &<br />Humanoid Robotics
-            </Heading>
-            <p className={clsx('hero__subtitle', styles.subtitle)}>
-              Master the cutting-edge intersection of artificial intelligence and robotics engineering.
-              Explore embodied intelligence, humanoid locomotion, and conversational AI systems.
-            </p>
-            <div className={styles.buttons}>
-              <Link
-                className="button button--primary button--lg"
-                to="/docs/part1/foundations-physical-ai">
-                Start Learning
-              </Link>
-              <Link
-                className="button button--outline button--lg"
-                to="/docs/part1/foundations-physical-ai">
-                View Curriculum
-              </Link>
-            </div>
+          <div className={styles.heroBadge}>
+              <Star size={12} style={{marginRight: '6px'}} fill="currentColor" />
+              The Intelligence Layer for Robotics
           </div>
-          <div className={styles.heroVisual}>
-            <div className={styles.heroOrb}></div>
-            <div className={styles.heroGrid}></div>
-            <div className={styles.heroGraphic}>
-              <div className={styles.humanoidSilhouette}></div>
-              <div className={styles.aiParticles}>
-                {[...Array(12)].map((_, i) => (
-                  <div key={i} className={styles.aiParticle} style={{'--delay': `${i * 0.2}s`}}></div>
-                ))}
-              </div>
-            </div>
+          <Heading as="h1" className={styles.mainTitle}>
+            Physical AI &<br />Humanoid Robotics
+          </Heading>
+          <p className={styles.subtitle}>
+            The most advanced engineering course for the next generation of humanoid developers. 
+            From control systems to conversational embodied agents.
+          </p>
+          <div className={styles.buttons}>
+            <Link
+              className="button button--primary button--lg"
+              to="/docs/part1/foundations-physical-ai"
+              style={{display:'flex', alignItems:'center', gap:'10px', padding: '1rem 2rem'}}>
+              Start Learning <ArrowRight size={20} />
+            </Link>
+            <Link
+              className="button button--secondary button--lg"
+              to="/signup"
+              style={{padding: '1rem 2rem'}}>
+              Join Community
+            </Link>
           </div>
         </div>
       </div>
@@ -59,63 +56,58 @@ function HomepageHeader() {
   );
 }
 
-function StatCard({ number, label, description }) {
-  return (
-    <div className={clsx('card', styles.statCard)}>
-      <div className={styles.statNumber}>{number}</div>
-      <div className={styles.statLabel}>{label}</div>
-      <div className={styles.statDescription}>{description}</div>
-    </div>
-  );
-}
-
-function FeatureCard({ title, description, icon, delay }) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), delay || 0);
-    return () => clearTimeout(timer);
-  }, [delay]);
+function CourseStats() {
+  const stats = [
+    { value: '06', label: 'Modular Parts' },
+    { value: '23', label: 'Advanced Chapters' },
+    { value: '100+', label: 'Live Projects' },
+  ];
 
   return (
-    <div className={clsx('card', styles.featureCard, isVisible && styles.visible)}>
-      <div className={styles.featureIcon}>{icon}</div>
-      <h3 className={styles.featureTitle}>{title}</h3>
-      <p className={styles.featureDescription}>{description}</p>
-    </div>
+    <section className={styles.statsSection}>
+      <div className="container">
+        <div className="row">
+          {stats.map((stat, index) => (
+            <div key={index} className="col col--4 text--center">
+              <div className={styles.statValue}>{stat.value}</div>
+              <div className={styles.statLabel}>{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
 function TechnologiesSection() {
   const technologies = [
-    { name: 'Sensors', desc: 'Advanced perception systems' },
-    { name: 'Actuators', desc: 'Precision motion control' },
-    { name: 'Locomotion', desc: 'Bipedal movement algorithms' },
-    { name: 'Control Systems', desc: 'Real-time dynamics' },
-    { name: 'Embodied AI', desc: 'Physical intelligence' },
-    { name: 'Computer Vision', desc: 'Visual perception' },
+    { name: 'Embodied AI', desc: 'Neural architectures for physical systems and real-time inference.', icon: <Globe size={24} />, span: 'span 8' },
+    { name: 'Computer Vision', desc: 'Spatial awareness and object tracking.', icon: <Layers size={24} />, span: 'span 4' },
+    { name: 'Control Systems', desc: 'Precision motion and dynamic balance.', icon: <Cpu size={24} />, span: 'span 4' },
+    { name: 'Locomotion', desc: 'Bipedal and quadrupedal movement algorithms.', icon: <Activity size={24} />, span: 'span 4' },
+    { name: 'Sensors', desc: 'Multi-modal data fusion.', icon: <Eye size={24} />, span: 'span 4' },
   ];
 
   return (
-    <section className={styles.technologiesSection}>
+    <section className={styles.sectionContainer}>
       <div className="container">
-        <div className="row">
-          <div className="col col--12">
-            <Heading as="h2" className={styles.sectionTitle}>
-              Core Technologies
-            </Heading>
-            <p className={styles.sectionSubtitle}>
-              Master the cutting-edge tools and frameworks used in modern robotics
-            </p>
-          </div>
+        <div className={styles.sectionHeader}>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Engineering Stack
+          </Heading>
+          <p className={styles.sectionSubtitle}>
+            Master the underlying technologies driving the robotics revolution.
+          </p>
         </div>
-        <div className="row">
+        
+        <div className={styles.bentoGrid}>
           {technologies.map((tech, index) => (
-            <div key={index} className="col col--4">
-              <div className={styles.techItem}>
-                <h3 className={styles.techTitle}>{tech.name}</h3>
-                <p className={styles.techDescription}>{tech.desc}</p>
+            <div key={index} className={styles.bentoItem} style={{gridColumn: tech.span}}>
+              <div className={styles.bentoItemIcon}>
+                {tech.icon}
               </div>
+              <h3 className={styles.bentoItemTitle}>{tech.name}</h3>
+              <p className={styles.bentoItemDesc}>{tech.desc}</p>
             </div>
           ))}
         </div>
@@ -126,69 +118,30 @@ function TechnologiesSection() {
 
 function UniqueValueProposition() {
   return (
-    <section className={styles.valueSection}>
+    <section className={styles.sectionContainer} style={{background: 'rgba(255,255,255,0.01)'}}>
       <div className="container">
-        <div className="row">
-          <div className="col col--12">
-            <Heading as="h2" className={styles.sectionTitle}>
-              Why This Course Stands Apart
-            </Heading>
-          </div>
+        <div className={styles.sectionHeader}>
+          <Heading as="h2" className={styles.sectionTitle}>
+            Why RoboLearn?
+          </Heading>
         </div>
-        <div className="row">
-          <div className="col col--4">
-            <div className={styles.valueItem}>
-              <div className={styles.valueIcon}>🔬</div>
-              <h3 className={styles.valueTitle}>Research-Backed</h3>
-              <p className={styles.valueDescription}>
-                Based on the latest findings from top robotics labs and research institutions.
-              </p>
-            </div>
+        
+        <div className={styles.valueGrid}>
+          <div className={styles.valueCard}>
+            <div style={{color: '#6366f1', marginBottom: '1.5rem'}}><BookOpen size={32} /></div>
+            <h3 className={styles.bentoItemTitle}>Research First</h3>
+            <p className={styles.bentoItemDesc}>Direct implementation of papers from NVIDIA, Tesla, and Boston Dynamics labs.</p>
           </div>
-          <div className="col col--4">
-            <div className={styles.valueItem}>
-              <div className={styles.valueIcon}>🛠️</div>
-              <h3 className={styles.valueTitle}>Hands-On Projects</h3>
-              <p className={styles.valueDescription}>
-                Build and deploy real robotic systems with guided, practical exercises.
-              </p>
-            </div>
+          <div className={styles.valueCard}>
+            <div style={{color: '#6366f1', marginBottom: '1.5rem'}}><Zap size={32} /></div>
+            <h3 className={styles.bentoItemTitle}>Production Ready</h3>
+            <p className={styles.bentoItemDesc}>Not just theory. Learn the deployment pipelines used in industry robotic fleets.</p>
           </div>
-          <div className="col col--4">
-            <div className={styles.valueItem}>
-              <div className={styles.valueIcon}>🚀</div>
-              <h3 className={styles.valueTitle}>Industry Ready</h3>
-              <p className={styles.valueDescription}>
-                Learn skills directly applicable to careers in robotics and AI companies.
-              </p>
-            </div>
+          <div className={styles.valueCard}>
+            <div style={{color: '#6366f1', marginBottom: '1.5rem'}}><Cpu size={32} /></div>
+            <h3 className={styles.bentoItemTitle}>AI-Integrated</h3>
+            <p className={styles.bentoItemDesc}>Built-in RAG Assistant trained on the entire curriculum to support your labs 24/7.</p>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CourseStats() {
-  const stats = [
-    { number: '6', label: 'Parts', description: 'Comprehensive curriculum' },
-    { number: '23', label: 'Chapters', description: 'In-depth coverage' },
-    { number: '100+', label: 'Examples', description: 'Practical applications' },
-  ];
-
-  return (
-    <section className={styles.statsSection}>
-      <div className="container">
-        <div className="row">
-          {stats.map((stat, index) => (
-            <div key={index} className="col col--4">
-              <StatCard
-                number={stat.number}
-                label={stat.label}
-                description={stat.description}
-              />
-            </div>
-          ))}
         </div>
       </div>
     </section>
@@ -197,33 +150,49 @@ function CourseStats() {
 
 export default function Home() {
   const {siteConfig} = useDocusaurusContext();
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        document.body.classList.add('home-page--scrolled');
+      } else {
+        document.body.classList.remove('home-page--scrolled');
+      }
+    };
+    
+    document.body.classList.add('home-page');
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      document.body.classList.remove('home-page', 'home-page--scrolled');
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <Layout
       title={`Physical AI & Humanoid Robotics`}
-      description="A comprehensive course on Physical AI and Humanoid Robotics">
+      description="Professional engineering course for embodied intelligence.">
       <HomepageHeader />
       <main>
         <CourseStats />
+        <TechnologiesSection />
+        
         <div className="container">
-          <div className="row">
-            <div className="col col--12">
-              <div className={clsx('glass-panel', styles.courseOverview)}>
-                <h2 className={styles.overviewTitle}>Complete Course Overview</h2>
-                <p className={styles.overviewDescription}>
-                  Dive deep into six comprehensive parts covering everything from foundational concepts
-                  to advanced conversational robotics systems. Each section builds upon the previous,
-                  creating a cohesive learning journey.
-                </p>
-                <Link
-                  className="button button--primary button--lg"
-                  to="/docs/part1/foundations-physical-ai">
-                  Explore Full Curriculum
-                </Link>
-              </div>
-            </div>
+          <div className={styles.courseOverview}>
+            <h2 className={styles.overviewTitle}>Engineered for Mastery</h2>
+            <p className={styles.overviewDescription}>
+              A curriculum designed by robotics engineers for robotics engineers. 
+              Move from URDF basics to transformer-based motion control in weeks.
+            </p>
+            <Link
+              className="button button--primary button--lg"
+              to="/docs/part1/foundations-physical-ai">
+              Browse the Syllabus
+            </Link>
           </div>
         </div>
-        <TechnologiesSection />
+
         <UniqueValueProposition />
       </main>
     </Layout>

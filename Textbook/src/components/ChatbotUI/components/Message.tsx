@@ -1,6 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 import { Message as MessageType } from '../types';
+import ReactMarkdown from 'react-markdown';
+import { User, Bot } from 'lucide-react';
 
 interface MessageProps {
   message: MessageType;
@@ -10,45 +12,29 @@ const Message: React.FC<MessageProps> = ({ message }) => {
   const isUser = message.sender === 'user';
 
   return (
-    <div
-      className={clsx('message', `message--${message.sender}`, {
-        'message--sending': message.status === 'sending',
-        'message--error': message.status === 'error',
-      })}
-      role="listitem"
-      aria-label={`${message.sender} message: ${message.content.substring(0, 50)}${message.content.length > 50 ? '...' : ''}`}
-    >
-      <div
-        className={clsx('message__container', {
-          'message__container--user': isUser,
-          'message__container--ai': !isUser,
-        })}
-        tabIndex={0}
-      >
-        <div
-          className={clsx('message__content', {
-            'message__content--user': isUser,
-            'message__content--ai': !isUser,
-          })}
-          role="paragraph"
-        >
-          {message.content}
+    <div className={clsx('message', `message--${message.sender}`)}>
+      <div className={clsx('message__container', {
+        'message__container--user': isUser,
+        'message__container--ai': !isUser,
+      })}>
+        <div className="message__content">
+            {isUser ? (
+                // User messages are usually short, just text
+                <p style={{margin:0}}>{message.content}</p>
+            ) : (
+                // AI messages need markdown
+                <ReactMarkdown>{message.content}</ReactMarkdown>
+            )}
         </div>
-        <div className="message__meta" aria-label={`Sent at ${message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}>
-          <time
-            className="message__timestamp"
-            dateTime={message.timestamp.toISOString()}
-          >
-            {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </time>
-          {message.status && (
-            <span
-              className={`message__status message__status--${message.status}`}
-              aria-label={`Status: ${message.status}`}
-            >
-              {message.status}
-            </span>
-          )}
+        
+        <div className="message__meta">
+            {/* 
+               We could show timestamps here, but often clean is better. 
+               Only show status for user messages if needed (e.g. error) 
+            */}
+            {isUser && message.status === 'error' && (
+                <span style={{color: '#f87171', fontWeight: 'bold'}}>Failed to send</span>
+            )}
         </div>
       </div>
     </div>

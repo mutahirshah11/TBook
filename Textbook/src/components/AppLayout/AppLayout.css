@@ -1,0 +1,314 @@
+/* App Shell Layout */
+
+/* Hide Default Docusaurus Navbar when inside App Shell */
+.app-shell-wrapper .navbar {
+  display: none !important;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: #0a0a0f; /* Deep dark bg */
+  color: #f8fafc;
+}
+
+/* Sidebar Styles */
+.app-sidebar {
+  width: 280px;
+  background: rgba(15, 15, 20, 0.6);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.app-sidebar__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+  padding-left: 0.5rem;
+}
+
+.app-sidebar__logo {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-sidebar__brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem; /* Larger to match Navbar brand usually */
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff 0%, #818cf8 100%); /* Match main site gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-sidebar__user-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  transition: all 0.2s;
+}
+
+.app-sidebar__user-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.app-sidebar__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.app-sidebar__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.app-sidebar__user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-sidebar__user-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.app-sidebar__user-role {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.app-sidebar__nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-sidebar__section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  padding-left: 0.75rem;
+}
+
+.app-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #94a3b8;
+  text-decoration: none !important;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.app-sidebar__item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: #e2e8f0;
+}
+
+.app-sidebar__item--active {
+  background: rgba(99, 102, 241, 0.1);
+  color: #818cf8;
+}
+
+.app-sidebar__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-sidebar__label {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.app-sidebar__active-indicator {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: #6366f1;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  box-shadow: -2px 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.app-sidebar__spacer {
+  flex: 1;
+}
+
+.app-sidebar__divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 1rem 0;
+}
+
+.app-sidebar__logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  color: #ef4444; /* Red for logout */
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+  opacity: 0.8;
+}
+
+.app-sidebar__logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  opacity: 1;
+}
+
+/* Main Content Area */
+.app-content {
+  flex: 1;
+  margin-left: 280px; /* Offset for fixed sidebar */
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.05), transparent 40%);
+  min-height: 100vh;
+}
+
+.app-content__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem;
+}
+
+/* Responsive adjustments */
+@media (min-width: 997px) {
+  .app-mobile-header,
+  .app-sidebar-mobile-drawer,
+  .app-mobile-backdrop {
+    display: none !important;
+  }
+}
+
+@media (max-width: 996px) {
+  /* Hide desktop sidebar */
+  .app-sidebar {
+    display: none;
+  }
+  
+  .app-content {
+    margin-left: 0;
+    padding-top: 60px; /* Space for mobile header */
+  }
+
+  .app-content__inner {
+    padding: 1.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    .app-content__inner {
+        padding: 0.75rem; /* Reduce padding for small screens */
+    }
+  }
+
+  /* Mobile Header */
+  .app-mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #0a0a0f;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+  }
+
+  .app-mobile-toggle {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    padding: 8px;
+    margin-right: 12px;
+  }
+
+  .app-mobile-brand {
+    display: flex;
+    align-items: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Mobile Drawer */
+  .app-sidebar-mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    background: #0a0a0f;
+    z-index: 1002;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .app-sidebar-mobile-drawer.open {
+    transform: translateX(0);
+  }
+
+  /* Reset Sidebar styles when inside drawer */
+  .app-sidebar-mobile-drawer .app-sidebar {
+    display: flex;
+    position: static;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-right: none;
+  }
+
+  .app-mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1001;
+    animation: fadeIn 0.2s ease-out;
+  }
+}

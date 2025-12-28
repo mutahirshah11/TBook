@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  title: User Profile API
+  version: 1.0.0
+  description: API for managing extended user profiles and onboarding status.
+
+paths:
+  /api/profile/status:
+    get:
+      summary: Get current user's onboarding status
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                  isOnboarded:
+                    type: boolean
+                  profile:
+                    $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Unauthorized (User not logged in)
+
+  /api/profile/onboarding:
+    post:
+      summary: Submit profile data to complete onboarding
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pythonProficiency
+                - developerRole
+              properties:
+                pythonProficiency:
+                  type: string
+                  enum: [Beginner, Intermediate, Advanced]
+                developerRole:
+                  type: string
+                  enum: [Frontend Developer, Backend Developer, Full Stack Developer, None]
+      responses:
+        '201':
+          description: Profile created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  redirectTo:
+                    type: string
+                    example: "/dashboard"
+        '400':
+          description: Validation error
+        '409':
+          description: Profile already exists (Immutable)
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: better-auth.session_token
+
+  schemas:
+    UserProfile:
+      type: object
+      properties:
+        pythonProficiency:
+          type: string
+        developerRole:
+          type: string
+        createdAt:
+          type: string
+          format: date-time

@@ -42,7 +42,7 @@ const config: Config = {
   url: 'https://mutahirshah11.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/Tbook/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -104,12 +104,14 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     colorMode: {
-      respectPrefersColorScheme: true,
+      defaultMode: 'dark',
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'Physical AI & Humanoid Robotics',
+      title: 'RoboLearn',
       logo: {
-        alt: 'Physical AI & Humanoid Robotics Logo',
+        alt: 'RoboLearn Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -117,12 +119,48 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Textbook',
+          label: 'Curriculum',
+          className: 'curriculum-sidebar-item',
         },
         {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
+          to: '/dashboard',
+          label: 'Dashboard',
           position: 'right',
+          className: 'navbar-portal-link',
+        },
+        // 1. Sign In (Visible on Desktop & Mobile Sidebar)
+        {
+          to: '/signin',
+          label: 'Sign In',
+          position: 'right',
+          className: 'navbar-login-link', 
+        },
+        // 2. Sign Up (Desktop Only - Stylish Button)
+        {
+          to: '/signup',
+          label: 'Sign Up',
+          position: 'right',
+          className: 'button button--primary navbar-cta desktop-only-item',
+        },
+        // 3. Sign Up (Mobile Sidebar Only - Aligned Item)
+        {
+          to: '/signup',
+          label: 'Sign Up', 
+          position: 'right',
+          className: 'mobile-sidebar-cta',
+        },
+        // 4. Get Started (Mobile Navbar Only - Small Gradient Button)
+        {
+          to: '/signin',
+          label: 'Get Started',
+          position: 'right',
+          className: 'mobile-navbar-cta',
+        },
+        {
+          label: 'Logout',
+          position: 'right',
+          to: '#',
+          className: 'mobile-only-nav-item logout-sidebar-item',
         },
       ],
     },
@@ -130,46 +168,54 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Learning',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Textbook',
               to: '/docs/part1/foundations-physical-ai',
             },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Dashboard',
+              to: '/dashboard',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'AI Assistant',
+              to: '/chatbot-test',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'Platform',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
+              label: 'About RoboLearn',
+              to: '/',
             },
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: 'Community',
+              href: 'https://discord.com',
+            },
+            {
+              label: 'Support',
+              href: 'https://x.com',
+            },
+          ],
+        },
+        {
+          title: 'Legal',
+          items: [
+            {
+              label: 'Privacy Policy',
+              to: '/',
+            },
+            {
+              label: 'Terms of Service',
+              to: '/',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `© ${new Date().getFullYear()} RoboLearn. Built for the Next Generation of Robotics.`,
     },
     prism: {
       theme: prismThemes.github,

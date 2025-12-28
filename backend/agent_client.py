@@ -97,19 +97,22 @@ class AgentClient:
 
             # Agent interface already imported at module level
 
-            # Extract context mode and selected text from metadata if available
+            # Extract context mode, selected text, and user profile from metadata if available
             context_mode = "full-book"
             selected_text = None
+            user_profile = None
 
             if message.metadata:
                 if "context_mode" in message.metadata:
                     context_mode = message.metadata["context_mode"]
                 if "selected_text" in message.metadata:
                     selected_text = message.metadata["selected_text"]
+                if "user_profile" in message.metadata:
+                    user_profile = message.metadata["user_profile"]
 
             # Call the actual agent
             response_parts = []
-            async for chunk in ask_agent(message.content, selected_text):
+            async for chunk in ask_agent(message.content, selected_text, user_profile):
                 response_parts.append(chunk)
 
             response_content = "".join(response_parts)
@@ -136,12 +139,15 @@ class AgentClient:
 
                 # Extract context mode and selected text from metadata if available
                 selected_text = None
+                user_profile = None
                 if message.metadata:
                     if "selected_text" in message.metadata:
                         selected_text = message.metadata["selected_text"]
+                    if "user_profile" in message.metadata:
+                        user_profile = message.metadata["user_profile"]
 
                 # Call the actual agent which returns an async generator
-                async for chunk in ask_agent(message.content, selected_text):
+                async for chunk in ask_agent(message.content, selected_text, user_profile):
                     # Yield each chunk from the actual agent
                     yield {
                         "content": chunk,
@@ -180,12 +186,15 @@ class AgentClient:
 
                 # Extract context mode and selected text from metadata if available
                 selected_text = None
+                user_profile = None
                 if message.metadata:
                     if "selected_text" in message.metadata:
                         selected_text = message.metadata["selected_text"]
+                    if "user_profile" in message.metadata:
+                        user_profile = message.metadata["user_profile"]
 
                 # Call the actual agent which returns an async generator
-                async for chunk in ask_agent(message.content, selected_text):
+                async for chunk in ask_agent(message.content, selected_text, user_profile):
                     # Accumulate the full content for logging
                     full_content += chunk
 

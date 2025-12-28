@@ -13,7 +13,7 @@ const DEFAULT_TIMEOUT = 30000; // 30 seconds
 const API_BASE_URL =
   (typeof process !== 'undefined' && process.env?.REACT_APP_API_BASE_URL) ||
   (typeof process !== 'undefined' && process.env?.API_BASE_URL) ||
-  'http://127.0.0.1:8001';
+  'http://localhost:8001';
 
 // API Client class for handling communication with the backend
 class ApiClient {
@@ -34,6 +34,7 @@ class ApiClient {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         ...options,
         signal: controller.signal,
+        credentials: 'include', // Important: Send Better Auth session cookie
         headers: {
           'Content-Type': 'application/json',
           ...options.headers,
@@ -78,9 +79,7 @@ class ApiClient {
     return this.request<SendMessageResponse>('/api/v1/chat', {
       method: 'POST',
       body: JSON.stringify(backendPayload),
-      headers: {
-        'Authorization': 'Bearer dummy-token', // This will be ignored in dev mode
-      },
+      // No manual Authorization header needed, we use the session cookie
     });
   }
 
@@ -103,8 +102,8 @@ class ApiClient {
           'Content-Type': 'application/json',
           'Accept': 'text/plain',
           'X-Stream': 'true', // Indicate that we want a streaming response
-          'Authorization': 'Bearer dummy-token', // Add dummy token for now
         },
+        credentials: 'include', // Important: Send Better Auth session cookie
         body: JSON.stringify(backendPayload),
         signal: controller.signal,
       });

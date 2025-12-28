@@ -169,8 +169,8 @@ a:hover::after {
 
 /* Navbar */
 .navbar {
-  background: var(--bg-secondary) !important;
-  border-bottom: 1px solid var(--border-primary);
+  background: transparent !important;
+  border: 1px solid var(--border-primary) !important;
   backdrop-filter: blur(12px) saturate(180%);
 }
 
@@ -239,6 +239,13 @@ a:hover::after {
 .doc-page {
   background: var(--bg-primary);
   padding: var(--spacing-xl) 0;
+  padding-top: 6rem; /* Space for fixed navbar */
+}
+
+@media (max-width: 996px) {
+  .doc-page {
+    padding-top: 5rem; /* Reduced space for mobile navbar */
+  }
 }
 
 .doc-article {

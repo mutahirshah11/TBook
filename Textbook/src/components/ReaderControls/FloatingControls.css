@@ -1,0 +1,126 @@
+/* Immersive Reader Floating Controls */
+
+/* Top Progress Bar */
+.reader-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 2000;
+}
+
+.reader-progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+  transition: width 0.1s ease-out;
+}
+
+/* Bottom Floating Dock */
+.reader-dock-wrapper {
+  position: fixed;
+  bottom: 32px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.reader-dock {
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  pointer-events: auto;
+  animation: dockAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dockAppear {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.reader-dock__item {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.reader-dock__item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  transform: translateY(-2px);
+}
+
+.reader-dock__item--success {
+  width: auto;
+  padding: 0 16px;
+  color: #10b981;
+  gap: 8px;
+}
+
+.reader-dock__item--success:hover {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+}
+
+.reader-dock__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.reader-dock__divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 8px;
+}
+
+/* Zen Mode Globals */
+body.zen-mode {
+  overflow-x: hidden;
+}
+
+body.zen-mode .navbar {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition: all 0.4s ease;
+}
+
+body.zen-mode .footer {
+  display: none;
+}
+
+/* Hide Sidebar/TOC in Zen Mode */
+.zen-mode [class*="docSidebarContainer"],
+.zen-mode [class*="tableOfContents"] {
+  display: none !important;
+}
+
+.zen-mode [class*="docMainContainer"] {
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  padding-left: 0 !important;
+}

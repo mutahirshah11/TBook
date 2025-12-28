@@ -5,12 +5,20 @@ import InputArea from './InputArea';
 import { Message as MessageType, ConversationSession } from '../types';
 import { apiClient } from '../utils/apiClient';
 import { sessionManager } from '../utils/sessionManager';
+import { Bot, X, Trash2, Sparkles, MessageSquare } from 'lucide-react';
 
 interface ChatWindowProps {
   isOpen: boolean;
   onClose: () => void;
   selectedText?: string;
 }
+
+const SUGGESTIONS = [
+  "Explain ROS2 nodes",
+  "What is URDF?",
+  "How does Gazebo work?",
+  "Inverse Kinematics basics"
+];
 
 const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, selectedText }) => {
   const [session, setSession] = useState<ConversationSession | null>(null);
@@ -26,20 +34,26 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, selectedText }
       if (existingSession) {
         setSession(existingSession);
       } else {
-        // Create a new session if none exists
         sessionManager.createSession();
         setSession(sessionManager.getSession());
       }
     }
   }, [isOpen]);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
-  }, [session?.messages]);
+  }, [session?.messages, isLoading]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleClearChat = () => {
+    if (window.confirm("Clear conversation history?")) {
+        sessionManager.clearSession();
+        sessionManager.createSession();
+        setSession(sessionManager.getSession());
+    }
   };
 
   const handleSendMessage = useCallback(async (message: string, contextText?: string) => {
@@ -49,7 +63,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, selectedText }
     setError(null);
 
     try {
-      // Create user message object
       const userMessageId = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const userMessage: MessageType = {
         id: userMessageId,
@@ -60,25 +73,21 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, selectedText }
         status: 'sending',
       };
 
-      // Add the user message to the session immediately
       sessionManager.addMessage(userMessage);
       setSession(sessionManager.getSession());
 
-      // Create a temporary AI message to hold the streaming response
       const aiMessageId = `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       let aiMessage: MessageType = {
         id: aiMessageId,
-        content: '', // Start with empty content
+        content: '',
         sender: 'ai',
         timestamp: new Date(),
         sourceReferences: [],
       };
 
-      // Add the temporary AI message to the session
       sessionManager.addMessage(aiMessage);
       setSession(sessionManager.getSession());
 
-      // Stream the response from the backend
       await apiClient.streamMessage({
         message,
         sessionId: session.id,
@@ -87,122 +96,114 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ isOpen, onClose, selectedText }
           currentPage: typeof window !== 'undefined' ? window.location.pathname : '',
         },
       }, (chunk, isFinal) => {
-        // Update the AI message content with the new chunk
         aiMessage = {
           ...aiMessage,
           content: aiMessage.content + chunk,
-          timestamp: new Date(), // Update timestamp to now
+          timestamp: new Date(),
         };
-
-        // If it's the final chunk, we can also update source references if provided
-        if (isFinal) {
-          // In a real implementation, the final chunk might contain source references
-          // For now, we'll just update the message as is
-        }
-
-        // Update the AI message in the session
         sessionManager.updateMessage(aiMessageId, aiMessage);
         setSession(sessionManager.getSession());
       });
 
-      // Update the user message status to delivered
       sessionManager.updateMessage(userMessageId, { status: 'delivered' });
       setSession(sessionManager.getSession());
     } catch (err) {
       console.error('Error sending message:', err);
       setError(err instanceof Error ? err.message : 'Failed to send message');
-
-      // Update the user message status to error
-      if (session?.messages.length > 0) {
-        const lastMessage = session.messages[session.messages.length - 1];
-        if (lastMessage.sender === 'user' && lastMessage.status === 'sending') {
-          sessionManager.updateMessage(lastMessage.id, { status: 'error' });
-          setSession(sessionManager.getSession());
-        }
+      
+      // Remove the empty AI message on error if it's still empty
+      const currentSession = sessionManager.getSession();
+      const lastMsg = currentSession?.messages[currentSession.messages.length - 1];
+      if (lastMsg?.sender === 'ai' && !lastMsg.content) {
+          // Ideally remove it, but for now we just leave it or show error in it
       }
     } finally {
       setIsLoading(false);
     }
   }, [session, selectedText]);
 
-  // Handle sending initial message with selected text if available
-  useEffect(() => {
-    if (selectedText && session) {
-      // Optionally prompt the user to ask about the selected text
-      // For now, we'll just store it for the next message
-    }
-  }, [selectedText, session]);
-
   if (!isOpen) return null;
 
   return (
-    <div
-      className="chat-window"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Chat with Book Assistant"
-      aria-describedby="chat-window-description"
-    >
-      <div id="chat-window-description" className="sr-only">
-        Interactive chat interface for asking questions about the book content
+    <div className="chat-window" role="dialog" aria-label="AI Assistant">
+      <div className="chat-window__header">
+        <div className="chat-window__title-container">
+          <div className="chat-window__icon">
+            <Bot size={20} />
+          </div>
+          <div>
+            <h3 className="chat-window__title">AI Assistant</h3>
+            <div style={{display:'flex', alignItems:'center', fontSize:'0.75rem', color:'#94a3b8'}}>
+                <span className="chat-window__status-dot"></span>
+                <span style={{marginLeft:'6px'}}>Online</span>
+            </div>
+          </div>
+        </div>
+        <div className="chat-window__actions">
+            <button onClick={handleClearChat} className="chat-window__action-button" title="Clear Chat">
+                <Trash2 size={18} />
+            </button>
+            <button onClick={onClose} className="chat-window__action-button" title="Close">
+                <X size={20} />
+            </button>
+        </div>
       </div>
 
-      <div className="chat-window__header" role="banner">
-        <h3 className="chat-window__title">Book Assistant</h3>
-        <button
-          onClick={onClose}
-          className="chat-window__close-button"
-          aria-label="Close chat"
-          title="Close chat"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </div>
-
-      <div
-        ref={chatContainerRef}
-        className="chat-window__messages-container"
-        role="log"
-        aria-live="polite"
-        aria-label="Conversation history"
-      >
+      <div ref={chatContainerRef} className="chat-window__messages-container">
         {session?.messages && session.messages.length > 0 ? (
-          <div role="list" aria-label="Messages">
+          <>
             {session.messages.map((message) => (
               <Message key={message.id} message={message} />
             ))}
-          </div>
-        ) : (
-          <div className="chat-window__empty-state" role="status" aria-label="No messages yet">
-            <p>Ask me anything about the book content!</p>
-            {selectedText && (
-              <p className="chat-window__selected-text-preview" aria-label={`Selected text: ${selectedText}`}>
-                Selected: "{selectedText.substring(0, 50)}{selectedText.length > 50 ? '...' : ''}"
-              </p>
+            {isLoading && (
+               <div className="message message--ai">
+                   <div className="message__container message__container--ai">
+                       <div className="typing-indicator">
+                           <div className="typing-dot"></div>
+                           <div className="typing-dot"></div>
+                           <div className="typing-dot"></div>
+                       </div>
+                   </div>
+               </div>
             )}
+          </>
+        ) : (
+          <div className="chat-window__empty-state">
+            <div className="empty-state__icon">
+                <Sparkles size={32} />
+            </div>
+            <h3>How can I help you today?</h3>
+            <p style={{fontSize: '0.9rem', maxWidth: '280px'}}>
+                I can explain robotics concepts, analyze code, or help you with ROS2.
+            </p>
+            {selectedText && (
+               <div className="chat-window__selected-text-preview">
+                  <strong>Selected Context:</strong> "{selectedText.substring(0, 60)}..."
+               </div>
+            )}
+            <div className="suggestion-chips">
+                {SUGGESTIONS.map(s => (
+                    <button key={s} className="suggestion-chip" onClick={() => handleSendMessage(s)}>
+                        {s}
+                    </button>
+                ))}
+            </div>
           </div>
         )}
-        <div ref={messagesEndRef} aria-hidden="true" />
+        <div ref={messagesEndRef} />
       </div>
 
       {error && (
-        <div
-          className="chat-window__error"
-          role="alert"
-          aria-live="assertive"
-          aria-label={`Error: ${error}`}
-        >
-          {error}
+        <div className="chat-window__error">
+          ⚠️ {error}
         </div>
       )}
 
-      <div className="chat-window__input-container" role="complementary">
+      <div className="chat-window__input-container">
         <InputArea
           onSend={handleSendMessage}
           disabled={isLoading}
-          placeholder={selectedText ? "Ask about the selected text..." : "Type your question..."}
+          placeholder={selectedText ? "Ask about selection..." : "Type your question..."}
         />
       </div>
     </div>

@@ -16,6 +16,12 @@ const sidebars: SidebarsConfig = {
   // Manually defined sidebar to control order and hierarchy
   tutorialSidebar: [
     {
+      type: 'link',
+      label: 'Back to Home',
+      href: '/',
+      className: 'mobile-sidebar-home-button',
+    },
+    {
       type: 'category',
       label: 'Part 1: Foundations of Physical AI',
       items: [

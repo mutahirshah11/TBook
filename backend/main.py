@@ -30,6 +30,7 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra = "ignore"
 
 # Initialize settings
 settings = Settings()
@@ -59,7 +60,14 @@ app = FastAPI(
 # Configure CORS middleware for ChatKit UI
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:4000",
+        "http://127.0.0.1:4000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -74,8 +82,8 @@ import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
-from routers import chat
-from src.api.auth import router as auth_router
+from routers import chat, profile
+# from src.api.auth import router as auth_router # Deprecated
 from src.api.conversations import router as conversations_router
 from utils.logging import setup_logging_middleware
 from utils.error_handlers import setup_error_handlers
@@ -83,8 +91,8 @@ from utils.error_handlers import setup_error_handlers
 # Include the chat router with API versioning
 app.include_router(chat.router, prefix="/api/v1", tags=["chat"])
 
-# Include the auth router with API versioning
-app.include_router(auth_router, prefix="/api/v1", tags=["authentication"])
+# Include the profile router (Task says /api/profile/onboarding)
+app.include_router(profile.router, prefix="/api/profile", tags=["profile"])
 
 # Include the conversations router with API versioning
 app.include_router(conversations_router, prefix="/api/v1", tags=["conversations"])

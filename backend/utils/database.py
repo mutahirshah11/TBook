@@ -35,11 +35,27 @@ class NeonDatabase:
         """
         Establish connection to Neon database with retry logic
         """
+        # Explicitly load .env from parent directory if variables are missing
+        if not os.getenv("NEON_DATABASE_URL") and not os.getenv("DATABASE_URL"):
+            parent_env = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), '.env')
+            logging.info(f"Attempting to load .env from: {parent_env}")
+            load_dotenv(parent_env)
+
         # Get the connection string from environment when connecting (not at init time)
-        self.connection_string = os.getenv("NEON_DATABASE_URL", "")
+        # Fallback to DATABASE_URL if NEON_DATABASE_URL is not found
+        neon_url = os.getenv("NEON_DATABASE_URL")
+        db_url = os.getenv("DATABASE_URL")
+        
+        self.connection_string = neon_url or db_url or ""
+        
+        # Log which one was found (masked)
+        if neon_url:
+            logging.info("Found NEON_DATABASE_URL")
+        if db_url:
+            logging.info("Found DATABASE_URL")
 
         if not self.connection_string:
-            logging.warning("No Neon database URL provided, logging to database will be disabled")
+            logging.warning("No Neon database URL provided (checked NEON_DATABASE_URL and DATABASE_URL), logging to database will be disabled")
             return
 
         for attempt in range(self.max_retries + 1):

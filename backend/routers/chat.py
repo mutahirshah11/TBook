@@ -20,6 +20,7 @@ from agent_client import agent_client
 from utils.database import neon_db
 from src.models.conversation import ConversationCreate
 from src.services.conversation_service import ConversationService
+from src.api.dependencies.auth import require_onboarded_user
 
 # Security functions for input sanitization
 def sanitize_input(text: str) -> str:
@@ -47,12 +48,6 @@ def validate_user_input(chat_request: ChatRequest) -> ChatRequest:
     if chat_request.message.content:
         chat_request.message.content = sanitize_input(chat_request.message.content)
 
-    # Sanitize user_id if present
-    if chat_request.message.user_id:
-        # Only allow alphanumeric, hyphens, and underscores
-        sanitized_user_id = re.sub(r'[^a-zA-Z0-9\-_]', '', chat_request.message.user_id)
-        chat_request.message.user_id = sanitized_user_id
-
     # Sanitize metadata if present
     if chat_request.message.metadata:
         # For metadata, we'll sanitize string values
@@ -77,7 +72,10 @@ class FrontendChatRequest(BaseModel):
     context_mode: Optional[str] = "full-book"  # "full-book" or "selected-text"
 
 @router.post("/", response_model=ChatResponse)
-async def chat_endpoint(chat_request: dict):
+async def chat_endpoint(
+    chat_request: dict,
+    current_user: dict = Depends(require_onboarded_user)
+):
     """
     Handle chat requests by forwarding them to the RAG agent and returning the response.
     Also logs the interaction to the Neon database.
@@ -85,8 +83,10 @@ async def chat_endpoint(chat_request: dict):
     """
     start_time = time.time()
     internal_message = None  # Initialize to ensure it's always defined
-    user_id = 'unknown'  # Initialize user_id to ensure it's always defined
-
+    
+    # Use authenticated user ID
+    user_id = current_user['id']
+    
     # Check if this is the frontend's format (dict with query_text) or the original format
     if isinstance(chat_request, dict):
         if 'query_text' in chat_request:
@@ -100,9 +100,14 @@ async def chat_endpoint(chat_request: dict):
 
             internal_message = Message(
                 content=message_content,
+                user_id=user_id, # Enforce auth user_id
                 metadata={
                     "context_mode": frontend_request.context_mode,
-                    "selected_text": frontend_request.selected_text
+                    "selected_text": frontend_request.selected_text,
+                    "user_profile": { # Inject profile for personalization
+                        "python_proficiency": current_user.get("python_proficiency"),
+                        "developer_role": current_user.get("developer_role")
+                    }
                 }
             )
         else:
@@ -110,13 +115,12 @@ async def chat_endpoint(chat_request: dict):
             chat_request_obj = ChatRequest(**chat_request)
             chat_request_obj = validate_user_input(chat_request_obj)
             internal_message = chat_request_obj.message
+            internal_message.user_id = user_id # Override with auth user_id
     else:
         # This is already a ChatRequest object (original format)
         chat_request = validate_user_input(chat_request)
         internal_message = chat_request.message
-
-    # Set user_id after internal_message is created
-    user_id = getattr(internal_message, 'user_id', 'unknown')
+        internal_message.user_id = user_id # Override with auth user_id
 
     try:
         # Log the incoming request
@@ -215,7 +219,10 @@ async def chat_endpoint(chat_request: dict):
 
 
 @router.post("/stream")
-async def chat_stream_endpoint(chat_request: dict):
+async def chat_stream_endpoint(
+    chat_request: dict,
+    current_user: dict = Depends(require_onboarded_user)
+):
     """
     Handle streaming chat requests by forwarding them to the RAG agent
     and streaming the response back to the client.
@@ -230,7 +237,9 @@ async def chat_stream_endpoint(chat_request: dict):
 
     # Initialize variables to ensure they're always defined
     internal_message = None
-    user_id = 'unknown'
+    
+    # Use authenticated user ID
+    user_id = current_user['id']
 
     # Check if this is the frontend's format (dict with query_text) or the original format
     if isinstance(chat_request, dict):
@@ -245,9 +254,14 @@ async def chat_stream_endpoint(chat_request: dict):
 
             internal_message = Message(
                 content=message_content,
+                user_id=user_id, # Enforce auth user_id
                 metadata={
                     "context_mode": frontend_request.context_mode,
-                    "selected_text": frontend_request.selected_text
+                    "selected_text": frontend_request.selected_text,
+                    "user_profile": { # Inject profile
+                        "python_proficiency": current_user.get("python_proficiency"),
+                        "developer_role": current_user.get("developer_role")
+                    }
                 }
             )
         else:
@@ -255,13 +269,12 @@ async def chat_stream_endpoint(chat_request: dict):
             chat_request_obj = ChatRequest(**chat_request)
             chat_request_obj = validate_user_input(chat_request_obj)
             internal_message = chat_request_obj.message
+            internal_message.user_id = user_id
     else:
         # This is already a ChatRequest object (original format)
         chat_request = validate_user_input(chat_request)
         internal_message = chat_request.message
-
-    # Set user_id after internal_message is created
-    user_id = getattr(internal_message, 'user_id', 'unknown')
+        internal_message.user_id = user_id
 
     # Generate a unique ID for this interaction to use for logging
     interaction_id = str(uuid.uuid4())
@@ -332,7 +345,6 @@ async def chat_stream_endpoint(chat_request: dict):
     async def event_generator():
         try:
             # Log the incoming request
-            user_id = getattr(internal_message, 'user_id', 'unknown')
             logging.info(f"Received streaming chat request for user: {user_id}")
 
             # Call the agent streaming function with logging
