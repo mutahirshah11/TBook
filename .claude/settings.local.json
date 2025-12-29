@@ -43,7 +43,9 @@
       "Bash(timeout 5 curl -s -X POST -H \"Content-Type: application/json\" -d \"{\"\"email\"\":\"\"test16@example.com\"\",\"\"password\"\":\"\"testpassword123\"\",\"\"name\"\":\"\"Test User 16\"\"}\" http://localhost:4000/api/auth/sign-up/email)",
       "Bash(dir \"C:\\\\Users\\\\DELL\\\\Desktop\\\\RoboticsBook\\\\book\\\\Textbook\" /b)",
       "Bash(git rm -r --cached node_modules)",
-      "Bash(dir .git /b)"
+      "Bash(dir .git /b)",
+      "Bash(git add Textbook/package.json)",
+      "Bash(git commit -m \"Fix: Add postinstall script to fix binary permissions for Vercel deployment\")"
     ]
   }
 }
