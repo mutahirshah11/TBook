@@ -652,10 +652,106 @@ a:hover::after {
 
 /* Footer */
 .footer {
-  background: var(--bg-secondary) !important;
-  border-top: 1px solid var(--border-primary);
+  background: rgba(5, 5, 5, 0.95) !important; /* Matches hero darker bg */
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
   color: var(--text-tertiary);
-  padding: var(--spacing-xl) 0 !important;
+  padding: 4rem 0 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Footer ambient glow */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footer__links {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem !important;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Matched to the 3 categories in config */
+  gap: 2rem;
+  justify-items: center;
+  text-align: center;
+  max-width: 1100px; /* Constrains the grid width to keep columns grouped centrally */
+  margin: 0 auto !important;
+}
+
+.footer__col {
+  margin-bottom: 0 !important;
+}
+
+.footer__title {
+  color: var(--text-primary) !important;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem !important;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+.footer__items {
+  padding-left: 0 !important;
+  list-style: none !important;
+}
+
+.footer__item {
+  margin-bottom: 0.75rem !important;
+}
+
+.footer__link-item {
+  color: var(--text-secondary) !important;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  opacity: 0.7;
+}
+
+.footer__link-item:hover {
+  color: var(--accent-primary) !important;
+  transform: scale(1.05);
+  text-decoration: none !important;
+  text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+  opacity: 1;
+}
+
+.footer__link-item::after {
+  display: none; /* Remove the underline effect from global link styles */
+}
+
+.footer__copyright {
+  position: relative;
+  z-index: 1;
+  color: var(--text-muted) !important;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  padding-top: 2rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 996px) {
+  .footer__links {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer__links {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
 }
 
 /* Responsive adjustments */

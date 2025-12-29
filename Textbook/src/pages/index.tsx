@@ -27,21 +27,22 @@ function HomepageHeader() {
         <div className={clsx(styles.heroContent, isVisible && styles.visible)}>
           <div className={styles.heroBadge}>
               <Star size={12} style={{marginRight: '6px'}} fill="currentColor" />
-              The Intelligence Layer for Robotics
+              Interactive Curriculum • Powered by RAG AI
           </div>
           <Heading as="h1" className={styles.mainTitle}>
-            Physical AI &<br />Humanoid Robotics
+            Physical AI & <br className="desktop-only" />
+            <span className={styles.nowrapDesktop}>RAG-Enhanced Learning</span>
           </Heading>
           <p className={styles.subtitle}>
-            The most advanced engineering course for the next generation of humanoid developers. 
-            From control systems to conversational embodied agents.
+            The world's first "living" textbook for humanoid robotics. Master control systems 
+            with a context-aware RAG Agent that answers questions and debugs code in real-time.
           </p>
           <div className={styles.buttons}>
             <Link
-              className="button button--primary button--lg"
+              className={clsx('button button--primary button--lg', styles.shimmerButton)}
               to="/docs/part1/foundations-physical-ai"
               style={{display:'flex', alignItems:'center', gap:'10px', padding: '1rem 2rem'}}>
-              Start Learning <ArrowRight size={20} />
+              Start Reading & Chatting <ArrowRight size={20} />
             </Link>
             <Link
               className="button button--secondary button--lg"
@@ -60,7 +61,7 @@ function CourseStats() {
   const stats = [
     { value: '06', label: 'Modular Parts' },
     { value: '23', label: 'Advanced Chapters' },
-    { value: '100+', label: 'Live Projects' },
+    { value: '100%', label: 'RAG Coverage' },
   ];
 
   return (
@@ -79,13 +80,34 @@ function CourseStats() {
   );
 }
 
+// Helper for mouse-tracking glow effect
+const SpotlightCard = ({ children, className = "", style = {} }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
+
+  return (
+    <div 
+      className={className} 
+      style={style} 
+      onMouseMove={handleMouseMove}
+    >
+      {children}
+    </div>
+  );
+};
+
 function TechnologiesSection() {
   const technologies = [
-    { name: 'Embodied AI', desc: 'Neural architectures for physical systems and real-time inference.', icon: <Globe size={24} />, span: 'span 8' },
-    { name: 'Computer Vision', desc: 'Spatial awareness and object tracking.', icon: <Layers size={24} />, span: 'span 4' },
-    { name: 'Control Systems', desc: 'Precision motion and dynamic balance.', icon: <Cpu size={24} />, span: 'span 4' },
-    { name: 'Locomotion', desc: 'Bipedal and quadrupedal movement algorithms.', icon: <Activity size={24} />, span: 'span 4' },
-    { name: 'Sensors', desc: 'Multi-modal data fusion.', icon: <Eye size={24} />, span: 'span 4' },
+    { name: 'Embodied AI', desc: 'Neural architectures for physical systems and real-time inference.', icon: <Globe size={24} />, span: 'span 8', color: '99, 102, 241' },
+    { name: 'Computer Vision', desc: 'Spatial awareness and object tracking.', icon: <Layers size={24} />, span: 'span 4', color: '6, 182, 212' },
+    { name: 'Control Systems', desc: 'Precision motion and dynamic balance.', icon: <Cpu size={24} />, span: 'span 4', color: '245, 158, 11' },
+    { name: 'Locomotion', desc: 'Bipedal and quadrupedal movement algorithms.', icon: <Activity size={24} />, span: 'span 4', color: '16, 185, 129' },
+    { name: 'Sensors', desc: 'Multi-modal data fusion.', icon: <Eye size={24} />, span: 'span 4', color: '244, 63, 94' },
   ];
 
   return (
@@ -93,22 +115,23 @@ function TechnologiesSection() {
       <div className="container">
         <div className={styles.sectionHeader}>
           <Heading as="h2" className={styles.sectionTitle}>
-            Engineering Stack
+            The AI-Native Stack
           </Heading>
           <p className={styles.sectionSubtitle}>
-            Master the underlying technologies driving the robotics revolution.
+            Every chapter is integrated with our RAG system, allowing you to query technical 
+            details and implementation steps as you learn.
           </p>
         </div>
         
         <div className={styles.bentoGrid}>
           {technologies.map((tech, index) => (
-            <div key={index} className={styles.bentoItem} style={{gridColumn: tech.span}}>
+            <SpotlightCard key={index} className={styles.bentoItem} style={{gridColumn: tech.span, '--tech-color': tech.color} as React.CSSProperties}>
               <div className={styles.bentoItemIcon}>
                 {tech.icon}
               </div>
               <h3 className={styles.bentoItemTitle}>{tech.name}</h3>
               <p className={styles.bentoItemDesc}>{tech.desc}</p>
-            </div>
+            </SpotlightCard>
           ))}
         </div>
       </div>
@@ -117,6 +140,12 @@ function TechnologiesSection() {
 }
 
 function UniqueValueProposition() {
+  const values = [
+    { title: 'Research First', desc: 'Direct implementation of papers from NVIDIA, Tesla, and Boston Dynamics labs.', icon: <BookOpen size={32} />, color: '99, 102, 241' },
+    { title: 'Production Ready', desc: 'Not just theory. Learn the deployment pipelines used in industry robotic fleets.', icon: <Zap size={32} />, color: '236, 72, 153' },
+    { title: 'Chat with the Book', desc: 'The integrated RAG Chatbot knows every line of this curriculum. Ask it to simplify equations or generate code instantly.', icon: <Cpu size={32} />, color: '16, 185, 129' },
+  ];
+
   return (
     <section className={styles.sectionContainer} style={{background: 'rgba(255,255,255,0.01)'}}>
       <div className="container">
@@ -127,21 +156,13 @@ function UniqueValueProposition() {
         </div>
         
         <div className={styles.valueGrid}>
-          <div className={styles.valueCard}>
-            <div style={{color: '#6366f1', marginBottom: '1.5rem'}}><BookOpen size={32} /></div>
-            <h3 className={styles.bentoItemTitle}>Research First</h3>
-            <p className={styles.bentoItemDesc}>Direct implementation of papers from NVIDIA, Tesla, and Boston Dynamics labs.</p>
-          </div>
-          <div className={styles.valueCard}>
-            <div style={{color: '#6366f1', marginBottom: '1.5rem'}}><Zap size={32} /></div>
-            <h3 className={styles.bentoItemTitle}>Production Ready</h3>
-            <p className={styles.bentoItemDesc}>Not just theory. Learn the deployment pipelines used in industry robotic fleets.</p>
-          </div>
-          <div className={styles.valueCard}>
-            <div style={{color: '#6366f1', marginBottom: '1.5rem'}}><Cpu size={32} /></div>
-            <h3 className={styles.bentoItemTitle}>AI-Integrated</h3>
-            <p className={styles.bentoItemDesc}>Built-in RAG Assistant trained on the entire curriculum to support your labs 24/7.</p>
-          </div>
+          {values.map((value, index) => (
+            <SpotlightCard key={index} className={styles.valueCard} style={{'--tech-color': value.color} as React.CSSProperties}>
+              <div className={styles.valueCardIcon}>{value.icon}</div>
+              <h3 className={styles.bentoItemTitle}>{value.title}</h3>
+              <p className={styles.bentoItemDesc}>{value.desc}</p>
+            </SpotlightCard>
+          ))}
         </div>
       </div>
     </section>
@@ -180,10 +201,10 @@ export default function Home() {
         
         <div className="container">
           <div className={styles.courseOverview}>
-            <h2 className={styles.overviewTitle}>Engineered for Mastery</h2>
+            <h2 className={styles.overviewTitle}>Read, Chat, Build</h2>
             <p className={styles.overviewDescription}>
-              A curriculum designed by robotics engineers for robotics engineers. 
-              Move from URDF basics to transformer-based motion control in weeks.
+              Our curriculum isn't just a PDF. It's a searchable, interactive knowledge base. 
+              Move from theory to implementation with an AI that's read every word of the syllabus.
             </p>
             <Link
               className="button button--primary button--lg"
