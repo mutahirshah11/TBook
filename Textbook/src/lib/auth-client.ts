@@ -1,5 +1,6 @@
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-    baseURL: "http://localhost:4000/api/auth"
+    // Updated to use the live deployed Auth Server
+    baseURL: "https://auth765.vercel.app"
 });

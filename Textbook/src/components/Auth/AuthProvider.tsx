@@ -56,11 +56,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             // Don't set loading true here to avoid flickering if refreshing
             // setProfileLoading(true); 
             try {
-                // Fetch profile from backend
+                // Fetch profile from backend (Commented out until Python backend is deployed)
+                /*
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 5000); 
 
-                const res = await fetch('http://localhost:8001/api/profile/me', {
+                const res = await fetch('https://your-python-backend.vercel.app/api/profile/me', {
                     credentials: 'include',
                     signal: controller.signal
                 });
@@ -72,9 +73,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     setProfile(data);
                 } else {
                     console.error("Failed to fetch profile:", res.status);
+                    setProfile({ is_onboarded: true }); // Fallback to allow entry
                 }
+                */
+               
+                // TEMPORARY: Assume onboarded if session exists but backend isn't ready
+                setProfile({ is_onboarded: true } as any);
+                
             } catch (e) {
                 console.error("Failed to fetch profile", e);
+                setProfile({ is_onboarded: true } as any);
             } finally {
                 setProfileLoading(false);
             }
