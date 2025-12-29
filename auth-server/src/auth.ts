@@ -24,9 +24,15 @@ export const auth = betterAuth({
             enabled: true,
         }
     },
-    secret: process.env.AUTH_SECRET || 'fallback-secret-for-development',
+    secret: process.env.BETTER_AUTH_SECRET || 'fallback-secret-for-development',
     plugins: [
         // Add any required plugins here
     ],
-    trustedOrigins: ['http://localhost:3000', 'http://localhost:8000'],
+    // Allow Vercel frontend and local development
+    trustedOrigins: [
+        'http://localhost:3000', 
+        'http://localhost:8000', 
+        process.env.FRONTEND_URL || '', 
+        process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ''
+    ].filter(Boolean),
 });
