@@ -21,6 +21,10 @@ app.use(express.json());
 console.log("Initializing Better Auth...");
 const authHandler = toNodeHandler(auth);
 
+app.get('/', (req, res) => {
+    res.status(200).send('Auth Server is Running');
+});
+
 app.use('/api/auth', (req, res, next) => {
     authHandler(req, res).catch(err => {
         console.error("Better Auth Error:", err);
@@ -28,11 +32,15 @@ app.use('/api/auth', (req, res, next) => {
     });
 });
 
-const server = app.listen(PORT, () => {
-    console.log(`Auth server running on http://localhost:${PORT}`);
-    console.log("Ready to handle authentication requests");
-});
+if (process.env.NODE_ENV !== 'production') {
+    const server = app.listen(PORT, () => {
+        console.log(`Auth server running on http://localhost:${PORT}`);
+        console.log("Ready to handle authentication requests");
+    });
 
-server.on('error', (err) => {
-    console.error("Server failed to start:", err);
-});
+    server.on('error', (err) => {
+        console.error("Server failed to start:", err);
+    });
+}
+
+export default app;
