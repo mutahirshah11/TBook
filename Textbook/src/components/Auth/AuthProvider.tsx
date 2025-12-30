@@ -53,15 +53,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const fetchProfile = async () => {
         if (session?.user) {
-            // Don't set loading true here to avoid flickering if refreshing
-            // setProfileLoading(true); 
             try {
-                // Fetch profile from backend (Commented out until Python backend is deployed)
-                /*
+                // Fetch profile from local backend
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 5000); 
 
-                const res = await fetch('https://your-python-backend.vercel.app/api/profile/me', {
+                const res = await fetch('http://localhost:8001/api/profile/me', {
                     credentials: 'include',
                     signal: controller.signal
                 });
@@ -73,16 +70,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     setProfile(data);
                 } else {
                     console.error("Failed to fetch profile:", res.status);
-                    setProfile({ is_onboarded: true }); // Fallback to allow entry
+                    // Fallback to session data if backend fails
+                    setProfile({ 
+                        ...session.user,
+                        is_onboarded: true 
+                    } as any);
                 }
-                */
-               
-                // TEMPORARY: Assume onboarded if session exists but backend isn't ready
-                setProfile({ is_onboarded: true } as any);
-                
             } catch (e) {
                 console.error("Failed to fetch profile", e);
-                setProfile({ is_onboarded: true } as any);
+                // Fallback to session data on error, ensuring session exists
+                if (session?.user) {
+                    setProfile({ 
+                        ...session.user,
+                        is_onboarded: true 
+                    } as any);
+                } else {
+                    setProfile(null);
+                }
             } finally {
                 setProfileLoading(false);
             }

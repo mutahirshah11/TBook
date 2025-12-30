@@ -11,7 +11,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     const location = useLocation();
     const history = useHistory();
     // Check if current path is protected
-    const isProtected = location.pathname.startsWith('/Tbook/docs') || location.pathname.startsWith('/docs');
+    const isProtected = location.pathname.startsWith('/docs');
 
     useEffect(() => {
         if (!loading && !session && isProtected) {
