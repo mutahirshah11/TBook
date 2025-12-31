@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/auth/:match*",
+      "destination": "https://auth765.vercel.app/api/auth/:match*"
+    }
+  ]
+}

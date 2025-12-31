@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authClient } from '../../lib/auth-client';
 import { useHistory, useLocation } from '@docusaurus/router';
+import { config } from '../../config';
 
 interface AuthContextType {
     session: any;
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 5000); 
 
-                const res = await fetch('http://localhost:8001/api/profile/me', {
+                const res = await fetch(`${config.backendUrl}/api/profile/me`, {
                     credentials: 'include',
                     signal: controller.signal
                 });
@@ -70,23 +71,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     setProfile(data);
                 } else {
                     console.error("Failed to fetch profile:", res.status);
-                    // Fallback to session data if backend fails
-                    setProfile({ 
-                        ...session.user,
-                        is_onboarded: true 
-                    } as any);
+                    setProfile(null);
                 }
             } catch (e) {
                 console.error("Failed to fetch profile", e);
-                // Fallback to session data on error, ensuring session exists
-                if (session?.user) {
-                    setProfile({ 
-                        ...session.user,
-                        is_onboarded: true 
-                    } as any);
-                } else {
-                    setProfile(null);
-                }
+                setProfile(null);
             } finally {
                 setProfileLoading(false);
             }

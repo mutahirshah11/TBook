@@ -1,0 +1,12 @@
+---
+title: Robotics Book Backend
+emoji: 🤖
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
+# Robotics Book Backend API
+FastAPI backend for the Robotics Book RAG Agent.
