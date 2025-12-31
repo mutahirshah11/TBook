@@ -7,13 +7,14 @@ import {
   GetSessionResponse,
   APIErrorResponse
 } from '../types';
+import { config } from '../../../config';
 
 // Configuration
 const DEFAULT_TIMEOUT = 30000; // 30 seconds
 const API_BASE_URL =
   (typeof process !== 'undefined' && process.env?.REACT_APP_API_BASE_URL) ||
   (typeof process !== 'undefined' && process.env?.API_BASE_URL) ||
-  'http://localhost:8001';
+  config.backendUrl;
 
 // API Client class for handling communication with the backend
 class ApiClient {

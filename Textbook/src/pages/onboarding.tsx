@@ -3,6 +3,7 @@ import Layout from '@theme/Layout';
 import { useHistory } from '@docusaurus/router';
 import { toast } from 'react-toastify';
 import { useAuth } from '../components/Auth/AuthProvider';
+import { config } from '../config';
 
 export default function Onboarding() {
   const [proficiency, setProficiency] = useState('Beginner');
@@ -26,7 +27,7 @@ export default function Onboarding() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000); 
 
-        const res = await fetch('http://localhost:8001/api/profile/onboarding', {
+        const res = await fetch(`${config.backendUrl}/api/profile/onboarding`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ python_proficiency: proficiency, developer_role: role }),
@@ -60,7 +61,7 @@ export default function Onboarding() {
         if (e.name === 'AbortError') {
              toast.error("Request timed out. Backend might be slow or down.");
         } else {
-             toast.error("Network error. Make sure backend is running on port 8001.");
+             toast.error("Network error. Could not connect to the profile service.");
         }
     } finally {
         setLoading(false);

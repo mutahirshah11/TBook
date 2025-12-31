@@ -3,25 +3,15 @@ import AppLayout from '../components/AppLayout/AppLayout';
 import { useAuth } from '../components/Auth/AuthProvider';
 import { toast } from 'react-toastify';
 import { User, Shield, Zap, Mail, Fingerprint, Save } from 'lucide-react';
+import { config } from '../config';
 
 function ProfileContent() {
-    const { profile, refreshProfile } = useAuth();
-    const [proficiency, setProficiency] = useState('Beginner');
-    const [role, setRole] = useState('Frontend Developer');
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        if (profile) {
-            setProficiency(profile.python_proficiency || 'Beginner');
-            setRole(profile.developer_role || 'Frontend Developer');
-        }
-    }, [profile]);
-
+// ...
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:8001/api/profile/onboarding', {
+            const res = await fetch(`${config.backendUrl}/api/profile/onboarding`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ python_proficiency: proficiency, developer_role: role }),
