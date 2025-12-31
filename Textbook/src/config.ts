@@ -14,7 +14,7 @@ export const config = {
     // Note: Once backend is deployed, replace the second URL with your Vercel/Render URL
     backendUrl: isDev 
         ? 'http://localhost:8001' 
-        : 'https://mutahirhussain-ragbackend.hf.space',
+        : (typeof window !== 'undefined' ? window.location.origin : 'https://mutahirhussain-ragbackend.hf.space'),
 };
 
 export default config;

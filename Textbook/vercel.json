@@ -3,6 +3,14 @@
     {
       "source": "/api/auth/:match*",
       "destination": "https://auth765.vercel.app/api/auth/:match*"
+    },
+    {
+      "source": "/api/profile/:match*",
+      "destination": "https://mutahirhussain-ragbackend.hf.space/api/profile/:match*"
+    },
+    {
+      "source": "/api/v1/:match*",
+      "destination": "https://mutahirhussain-ragbackend.hf.space/api/v1/:match*"
     }
   ]
 }
