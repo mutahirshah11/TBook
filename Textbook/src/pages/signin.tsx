@@ -26,7 +26,7 @@ export default function Signin() {
             setLoading(false);
             toast.error(error.message);
         } else {
-            toast.success("Welcome back! Signing you in...");
+            toast.success("Welcome back! Logging you in...");
             history.push('/dashboard');
         }
     };
@@ -71,7 +71,7 @@ export default function Signin() {
                 </div>
                 
                 <button className="button button--primary button--block" disabled={loading} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px'}}>
-                    {loading ? <Loader2 className="animate-spin" size={20} /> : 'Sign In'}
+                    {loading ? <Loader2 className="animate-spin" size={20} /> : 'Login'}
                     {!loading && <ArrowRight size={18} />}
                 </button>
                 <style>{`

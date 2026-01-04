@@ -594,7 +594,7 @@ body {
   }
 
   /* 3. Hide specific links (Dashboard, etc) from the top bar on mobile if they are not the auth buttons AND not the dropdown */
-  /* We only want .navbar-login-link (Sign In), .navbar-cta (Sign Up), .navbar-chapter-dropdown, .user-profile-container, .mobile-navbar-cta and .desktop-only-item to show */
+  /* We only want .navbar-login-link (Login), .navbar-cta (Sign Up), .navbar-chapter-dropdown, .user-profile-container, .mobile-navbar-cta and .desktop-only-item to show */
   .navbar__items--right > .navbar__item:not(.navbar-login-link):not(.navbar-cta):not(.navbar-chapter-dropdown):not(.mobile-only-nav-item):not(.user-profile-container):not(.mobile-navbar-cta):not(.desktop-only-item) {
     display: none !important;
   }

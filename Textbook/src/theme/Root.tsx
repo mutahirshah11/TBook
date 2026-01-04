@@ -15,7 +15,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (!loading && !session && isProtected) {
-             toast.info("Please Signin to access the Textbook", {
+             toast.info("Please Login to access the Textbook", {
                 toastId: 'auth-guard',
                 position: "top-center"
             });

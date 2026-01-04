@@ -104,7 +104,7 @@ export default function Signup() {
 
             <div className="text--center margin-top--lg padding-top--md" style={{borderTop: '1px solid rgba(255,255,255,0.05)'}}>
                 <p className="margin-bottom--none" style={{fontSize: '0.9rem', color: '#94a3b8'}}>
-                    Already have an account? <Link to="/signin" style={{fontWeight: 600}}>Sign In</Link>
+                    Already have an account? <Link to="/signin" style={{fontWeight: 600}}>Login</Link>
                 </p>
             </div>
         </AuthLayout>

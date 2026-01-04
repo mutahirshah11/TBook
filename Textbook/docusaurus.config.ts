@@ -131,7 +131,7 @@ const config: Config = {
         // 1. Sign In (Visible on Desktop & Mobile Sidebar)
         {
           to: '/signin',
-          label: 'Sign In',
+          label: 'Login',
           position: 'right',
           className: 'navbar-login-link', 
         },

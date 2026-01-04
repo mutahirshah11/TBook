@@ -68,7 +68,7 @@ export default function NavbarItemWrapper(props) {
   }
 
   // Handle Sign In: Show UserMenu if logged in, else show Sign In link
-  if (label === 'Sign In') {
+  if (label === 'Login') {
     if (session) {
         // Force hide in mobile sidebar - Docusaurus v3 uses 'mobile' prop for items in sidebar
         if (props.mobile === true) {
@@ -146,7 +146,7 @@ export default function NavbarItemWrapper(props) {
                 className="navbar__item navbar__link"
                 onClick={(e) => {
                     e.preventDefault();
-                    toast.info("Please Signin to access the Textbook", {
+                    toast.info("Please Login to access the Textbook", {
                         position: "top-center",
                         autoClose: 3000,
                     });

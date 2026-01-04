@@ -44,7 +44,7 @@ const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
   const toggleChat = () => {
     if (!isAuthorized) {
-        toast.warning("Signin to Use the Ragchatbot", {
+        toast.warning("Login to Use the Ragchatbot", {
             position: "bottom-right",
             theme: "colored" // Yellow/Warning theme usually
         });
@@ -60,7 +60,7 @@ const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({ children }) 
   // Function to handle "Ask about selected text" action
   const handleAskAboutSelection = () => {
     if (!isAuthorized) {
-        toast.warning("Signin to Use the Ragchatbot", {
+        toast.warning("Login to Use the Ragchatbot", {
             position: "bottom-right",
             theme: "colored"
         });
