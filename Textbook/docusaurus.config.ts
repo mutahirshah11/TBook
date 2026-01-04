@@ -178,10 +178,6 @@ const config: Config = {
               label: 'Dashboard',
               to: '/dashboard',
             },
-            {
-              label: 'AI Assistant',
-              to: '/chatbot-test',
-            },
           ],
         },
         {

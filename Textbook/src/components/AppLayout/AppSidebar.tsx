@@ -9,7 +9,6 @@ import {
   User, 
   LogOut, 
   Settings, 
-  MessageSquare, 
   Cpu,
   ChevronRight
 } from 'lucide-react';
@@ -94,12 +93,6 @@ export default function AppSidebar() {
           icon={BookOpen} 
           label="Course Material" 
           active={location.pathname.startsWith('/docs')} 
-        />
-        <SidebarItem 
-          to="/chatbot-test" 
-          icon={MessageSquare} 
-          label="AI Tutor" 
-          active={isActive('/chatbot-test')} 
         />
 
         <div className="app-sidebar__spacer" />

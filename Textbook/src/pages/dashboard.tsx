@@ -82,10 +82,6 @@ function DashboardContent() {
                             <BookOpen size={24} style={{marginBottom: '8px', color: '#818cf8'}} />
                             <span style={{fontSize: '0.9rem', fontWeight: 500}}>Read</span>
                         </button>
-                        <button onClick={() => history.push('/chatbot-test')} style={{aspectRatio: '1', background: 'var(--glass-bg)', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 0.2s', color: '#f8fafc'}}>
-                            <MessageSquare size={24} style={{marginBottom: '8px', color: '#34d399'}} />
-                            <span style={{fontSize: '0.9rem', fontWeight: 500}}>Ask AI</span>
-                        </button>
                         <button style={{aspectRatio: '1', background: 'var(--glass-bg)', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 0.2s', color: '#f8fafc'}}>
                             <Terminal size={24} style={{marginBottom: '8px', color: '#f472b6'}} />
                             <span style={{fontSize: '0.9rem', fontWeight: 500}}>Lab</span>

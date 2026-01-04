@@ -46,10 +46,6 @@ export default function FloatingControls({ onZenToggle, isZen }: any) {
             {isZen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
           </button>
           
-          <button className="reader-dock__item" onClick={() => history.push('/chatbot-test')} title="Ask AI Assistant">
-            <MessageSquare size={20} color="#6366f1" />
-          </button>
-          
           <button className="reader-dock__item" title="Reader Settings">
             <Settings2 size={20} />
           </button>
