@@ -6,7 +6,18 @@ import { User, Shield, Zap, Mail, Fingerprint, Save } from 'lucide-react';
 import { config } from '../config';
 
 function ProfileContent() {
-// ...
+    const { profile, refreshProfile } = useAuth();
+    const [proficiency, setProficiency] = useState(profile?.python_proficiency || 'Beginner');
+    const [role, setRole] = useState(profile?.developer_role || 'Frontend Developer');
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (profile) {
+            setProficiency(profile.python_proficiency || 'Beginner');
+            setRole(profile.developer_role || 'Frontend Developer');
+        }
+    }, [profile]);
+
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
