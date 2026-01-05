@@ -79,22 +79,23 @@ def retrieve_book_context_logic(query: str, limit: int = 5) -> str:
             
         result_str = "\n".join(formatted_chunks)
         if not result_str:
-            return "No relevant book context found."
+            result_str = "No relevant book context found."
+
+        # Structured Logging
+        log_payload = {
+            "event": "retrieval",
+            "query": query,
+            "count": len(chunks),
+            "top_score": chunks[0].score if chunks else 0.0,
+            "chunks": [{"id": c.metadata.file_path, "score": c.score} for c in chunks]
+        }
+        logger.info(f"Retrieval Debug: {log_payload}")
             
         return result_str
 
     except Exception as e:
-        logger.error(f"Retrieval failed: {e}", exc_info=True)
-        return f"Error during retrieval: {str(e)}"
-
-    # Structured Logging
-    log_payload = {
-        "event": "retrieval",
-        "query": query,
-        "count": len(chunks),
-        "top_score": chunks[0].score if chunks else 0.0,
-        "chunks": [{"id": c.metadata.file_path, "score": c.score} for c in chunks]
-    }
-    logger.info(f"Retrieval Debug: {log_payload}")
-    
-    return result_str
+        error_msg = str(e)
+        logger.error(f"Retrieval failed: {error_msg}", exc_info=True)
+        if "429" in error_msg or "TooManyRequests" in error_msg:
+             return "System Busy: The retrieval service is experiencing high traffic. Please try again in a minute."
+        return f"Error during retrieval: {error_msg}"

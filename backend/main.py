@@ -87,8 +87,9 @@ async def lifespan(app: FastAPI):
             cohere_client = settings.get_cohere_client()
             # Simple embedding check to verify API key and connectivity
             if cohere_client:
-                cohere_client.embed(texts=["warmup"], model="embed-english-v3.0", input_type="search_query")
-                logging.info("Cohere connection successful.")
+                # SKIP CALL TO SAVE QUOTA (Free tier limit is very low, e.g. 5/min)
+                # cohere_client.embed(texts=["warmup"], model="embed-english-v3.0", input_type="search_query")
+                logging.info("Cohere client initialized (Skipping API call to save quota).")
                 rag_health["cohere"] = True
             else:
                 logging.warning("Cohere client not initialized (API Key missing?).")
