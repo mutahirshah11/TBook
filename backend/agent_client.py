@@ -46,7 +46,7 @@ class AgentClient:
 
     def __init__(self):
         # Load timeout from environment variable
-        self.timeout = int(os.getenv("AGENT_TIMEOUT", "30"))
+        self.timeout = int(os.getenv("AGENT_TIMEOUT", "60"))
         logging.info("AgentClient initialized with timeout: %d seconds", self.timeout)
 
     async def run_agent(self, message: Message) -> Response:
@@ -76,9 +76,15 @@ class AgentClient:
                 status=ResponseStatus.ERROR
             )
         except Exception as e:
-            logging.error(f"Error in run_agent: {str(e)}")
+            error_msg = str(e)
+            logging.error(f"Error in run_agent: {error_msg}")
+            
+            friendly_message = "An error occurred while processing your request"
+            if "429" in error_msg or "Quota exceeded" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
+                friendly_message = "⚠️ System Busy: High traffic detected. Please wait a moment before trying again."
+            
             return Response(
-                content="An error occurred while processing your request",
+                content=friendly_message,
                 message_id=message.user_id or "unknown",
                 timestamp=message.timestamp,
                 status=ResponseStatus.ERROR
@@ -161,9 +167,15 @@ class AgentClient:
                 "status": ResponseStatus.ERROR.value
             }
         except Exception as e:
-            logging.error(f"Error in run_agent_stream: {str(e)}")
+            error_msg = str(e)
+            logging.error(f"Error in run_agent_stream: {error_msg}")
+            
+            friendly_message = f"An error occurred while processing your request: {error_msg}"
+            if "429" in error_msg or "Quota exceeded" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
+                friendly_message = "⚠️ System Busy: High traffic detected. Please wait a moment before trying again."
+            
             yield {
-                "content": f"An error occurred while processing your request: {str(e)}",
+                "content": friendly_message,
                 "status": ResponseStatus.ERROR.value
             }
 
@@ -251,7 +263,8 @@ class AgentClient:
                 "status": ResponseStatus.ERROR.value
             }
         except Exception as e:
-            logging.error(f"Error in run_agent_stream_with_logging: {str(e)}")
+            error_msg = str(e)
+            logging.error(f"Error in run_agent_stream_with_logging: {error_msg}")
 
             # Log the error to database
             if interaction_id:
@@ -266,14 +279,18 @@ class AgentClient:
                     response_timestamp=datetime.now(),
                     response_time_ms=int((time.time() - start_time) * 1000),
                     error_occurred=True,
-                    error_message=str(e),
+                    error_message=error_msg,
                     metadata=message.metadata
                 )
 
                 await neon_db.log_interaction(error_interaction)
 
+            friendly_message = f"An error occurred while processing your request: {error_msg}"
+            if "429" in error_msg or "Quota exceeded" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
+                friendly_message = "⚠️ System Busy: High traffic detected. Please wait a moment before trying again."
+
             yield {
-                "content": f"An error occurred while processing your request: {str(e)}",
+                "content": friendly_message,
                 "status": ResponseStatus.ERROR.value
             }
 

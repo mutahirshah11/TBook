@@ -193,7 +193,32 @@ async def chat_endpoint(
         return response
 
     except Exception as e:
-        logging.error(f"Error in chat endpoint: {str(e)}")
+        error_msg = str(e)
+        logging.error(f"Error in chat endpoint: {error_msg}")
+
+        # Check for Rate Limit / Quota errors
+        if "429" in error_msg or "Quota exceeded" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
+            friendly_message = "⚠️ System Busy: High traffic detected. Please wait a moment before trying again."
+            
+            # Log specific error interaction
+            error_interaction = InteractionLog(
+                id=str(uuid.uuid4()),
+                user_id=user_id,
+                request_content=internal_message.content if internal_message else "",
+                response_content="",
+                request_timestamp=internal_message.timestamp if internal_message else datetime.now(),
+                response_timestamp=datetime.now(),
+                response_time_ms=int((time.time() - start_time) * 1000),
+                error_occurred=True,
+                error_message="Rate Limit Exceeded (429)",
+                metadata=internal_message.metadata if internal_message else None
+            )
+            await neon_db.log_interaction(error_interaction)
+
+            raise HTTPException(
+                status_code=429,
+                detail=friendly_message
+            )
 
         # Log error interaction
         error_interaction = InteractionLog(
@@ -205,7 +230,7 @@ async def chat_endpoint(
             response_timestamp=datetime.now(),
             response_time_ms=int((time.time() - start_time) * 1000),
             error_occurred=True,
-            error_message=str(e),
+            error_message=error_msg,
             metadata=internal_message.metadata if internal_message else None
         )
 
@@ -214,7 +239,7 @@ async def chat_endpoint(
         # Raise HTTP exception which will be handled by our error handlers
         raise HTTPException(
             status_code=500,
-            detail=f"Error processing chat request: {str(e)}"
+            detail=f"Error processing chat request: {error_msg}"
         )
 
 
@@ -353,7 +378,12 @@ async def chat_stream_endpoint(
                 yield f"data: {json.dumps(chunk)}\n\n"
 
         except Exception as e:
-            logging.error(f"Error in chat stream endpoint: {str(e)}")
+            error_msg = str(e)
+            logging.error(f"Error in chat stream endpoint: {error_msg}")
+
+            friendly_message = error_msg
+            if "429" in error_msg or "Quota exceeded" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
+                friendly_message = "⚠️ System Busy: High traffic detected. Please wait a moment before trying again."
 
             # Log error interaction immediately
             error_interaction = InteractionLog(
@@ -365,13 +395,13 @@ async def chat_stream_endpoint(
                 response_timestamp=datetime.now(),
                 response_time_ms=int((time.time() - start_time) * 1000),
                 error_occurred=True,
-                error_message=str(e),
+                error_message=error_msg,
                 metadata=internal_message.metadata if internal_message else None
             )
 
             await neon_db.log_interaction(error_interaction)
 
-            yield f"data: {json.dumps({'error': str(e), 'status': 'error'})}\n\n"
+            yield f"data: {json.dumps({'error': friendly_message, 'status': 'error'})}\n\n"
 
     # Log the start of the streaming interaction
     stream_start_log = InteractionLog(

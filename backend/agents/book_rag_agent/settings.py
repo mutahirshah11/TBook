@@ -37,7 +37,8 @@ class Settings:
                 logger.warning("QDRANT_URL not set. Qdrant client may fail.")
             cls._qdrant_client = QdrantClient(
                 url=cls.QDRANT_URL,
-                api_key=cls.QDRANT_API_KEY
+                api_key=cls.QDRANT_API_KEY,
+                prefer_grpc=False
             )
         return cls._qdrant_client
 
