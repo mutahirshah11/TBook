@@ -43,6 +43,20 @@ async def lifespan(app: FastAPI):
     logging.info("Starting up application...")
     await init_database()
     logging.info("Application startup completed, database connection initialized")
+
+    # Startup: Warmup Qdrant Connection
+    try:
+        from agents.book_rag_agent.settings import settings
+        logging.info("Warming up Qdrant client...")
+        qdrant = settings.get_qdrant_client()
+        # Perform a lightweight check to ensure connection is alive
+        collections = qdrant.get_collections()
+        logging.info(f"Qdrant connection successful. Found {len(collections.collections)} collections.")
+    except Exception as e:
+        logging.error(f"WARNING: Failed to initialize/warmup Qdrant: {e}")
+        # We don't raise here to allow the app to start even if Qdrant is temporarily down,
+        # but RAG features will likely fail until it recovers.
+
     yield
     # Shutdown: Close database connection
     logging.info("Shutting down application...")
