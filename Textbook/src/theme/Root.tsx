@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import React, { useEffect } from 'react';
 import ChatbotProvider from '../components/ChatbotUI/ChatbotProvider';
 import { AuthProvider, useAuth } from '../components/Auth/AuthProvider';
