@@ -1,4 +1,4 @@
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 import React, { useEffect } from 'react';
 import ChatbotProvider from '../components/ChatbotUI/ChatbotProvider';
 import { AuthProvider, useAuth } from '../components/Auth/AuthProvider';
@@ -45,6 +45,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
                 {children}
             </AuthGuard>
             <ToastContainer position="bottom-right" theme="colored" />
+            <Analytics /> 
         </ChatbotProvider>
     </AuthProvider>
   );
